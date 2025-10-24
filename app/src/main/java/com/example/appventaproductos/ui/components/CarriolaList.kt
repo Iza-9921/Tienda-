@@ -40,7 +40,7 @@ fun PreviewCarriolaList() {
     val lista = listOf(
         Carriola(
             id = 1,
-            imagen = R.drawable.carriola,
+            imagen = R.drawable.carriola1,
             TítuloProducto = "Carriola Modular Premium 3-en-1 (Moises, Asiento Reversible y Autoasiento)",
             Precio = "MXN 8,999.00",
             Condición = "Nueva (Certificada y Sellada)",
@@ -54,7 +54,7 @@ fun PreviewCarriolaList() {
         ),
         Carriola(
             id = 2,
-            imagen = R.drawable.carriola1,
+            imagen = R.drawable.carreolazul,
             TítuloProducto = "Carriola Ultra Ligera de Viaje",
             Precio = "MXN 3,450.00",
             Condición = "Nueva (Certificada por fabricante)",
@@ -63,7 +63,20 @@ fun PreviewCarriolaList() {
             Materiales = "Marco de acero reforzado",
             Rangoedad = "A partir de los 6 meses",
             metodoEnvio = "Envío Express (24-48 horas)"
-        )
+        ),
+                Carriola(
+                id = 3,
+        imagen = R.drawable.carrioladoble,
+        TítuloProducto = "Carriola Ultra Ligera de Viaje",
+        Precio = "MXN 6,990.00",
+        Condición = "Nueva (Ideal para padres activos)",
+        Características = "- Diseño aerodinámico de 3 ruedas grandes de aire para una estabilidad superior al correr.\n" +
+                "    - Freno de mano de tambor para desaceleración y frenado de emergencia.",
+        Peso = "13.8 kg",
+        Materiales = "Estructura de aluminio aeronáutico y neumáticos de caucho",
+        Rangoedad = "A partir de los 6 meses",
+        metodoEnvio = "Recolección local gratuita en Ciudad de México o envío nacional con tarifa plana de MXN 200.00"
+    )
     )
     AppVentaProductosTheme { Surface { CarriolaList(lista = lista, onClick = { }) } }
 }

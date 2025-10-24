@@ -1,4 +1,5 @@
 package com.example.appventaproductos.ui.components
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
