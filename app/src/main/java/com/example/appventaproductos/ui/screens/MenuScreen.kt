@@ -19,8 +19,8 @@ fun MenuScreen(viewModel: MenuViewModel, navController: NavController) {
     ) {
         Row(modifier = Modifier.fillMaxWidth()){
             InfoCard(
-                "Carreola",
-                "Carreolas en descuento",
+                "Carriola",
+                "Carriolas en descuento",
                 Modifier.weight(1f)
                     .clickable{viewModel.goToCarriola(navController)},
                 viewModel
