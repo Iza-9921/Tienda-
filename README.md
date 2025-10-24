@@ -1,8 +1,7 @@
 #  Tienda para Bebés
 
 ##  Integrantes del equipo
-
-- Santiago Acosta Sotelo  
+  
 - Erick Arteaga Hernandez  
 - Sandra Izabella campos Nazario
 - Isaac leonardo López Flores
