@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.appventaproductos.ui.components.InfoCard
+import com.example.appventaproductos.ui.components.buttons.PrimaryButton
 import com.example.appventaproductos.viewmodel.MenuViewModel
 
 @Composable

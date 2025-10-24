@@ -40,7 +40,7 @@ fun PreviewRopaBebeList() {
     val lista = listOf(
         Ropa(
             id = 1,
-            imagen = R.drawable.body,
+            imagen = R.drawable.unisex,
             TítuloProducto = "Body algodón manga larga - Rosa con ositos",
             Precio = "MXN 199.00",
             Condición = "Nuevo",

@@ -61,7 +61,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
             )
         }
 
-        PrimaryButton("Iniciar sesión") {
+        PrimaryButton("Iniciar sesion") {
             viewModel.login {
                 // Navegar a "home" — en tu NavHost la pantalla principal se llama "home"
                 navController.navigate("menu") {
