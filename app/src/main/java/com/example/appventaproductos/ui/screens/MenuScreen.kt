@@ -17,14 +17,24 @@ fun MenuScreen(viewModel: MenuViewModel, navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(20.dp),
         modifier = Modifier.padding(30.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth()){
+        Row(modifier = Modifier.fillMaxWidth()) {
             InfoCard(
                 "Carriola",
                 "Carriolas en descuento",
                 Modifier.weight(1f)
-                    .clickable{viewModel.goToCarriola(navController)},
+                    .clickable { viewModel.goToCarriola(navController) },
                 viewModel
             )
+        }
+            Row(modifier = Modifier.fillMaxWidth()){
+            InfoCard(
+                "Ropa",
+                "Ropa para todos los meses",
+                Modifier.weight(1f)
+                    .clickable{viewModel.goToRopa(navController)},
+                viewModel
+            )
+
 
         }
     }

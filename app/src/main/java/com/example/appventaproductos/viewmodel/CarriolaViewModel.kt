@@ -31,7 +31,7 @@ class CarriolaViewModel : ViewModel() {
             ),
             Carriola(
                 id = 2,
-                imagen = R.drawable.carriola,
+                imagen = R.drawable.carriola1,
                 TítuloProducto = "Carriola Ultra Ligera de Viaje",
                 Precio = "MXN 3,450.00",
                 Condición = "Nueva (Certificada por fabricante)",

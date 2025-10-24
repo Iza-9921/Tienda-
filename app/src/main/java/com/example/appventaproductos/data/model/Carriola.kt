@@ -5,7 +5,7 @@ import com.example.appventaproductos.R
 
 data class Carriola(
     val id: Int,
-    @DrawableRes val imagen: Int = R.drawable.carriola,
+    @DrawableRes val imagen: Int,
     val TítuloProducto: String,
     val Precio: String,
     val Condición: String,

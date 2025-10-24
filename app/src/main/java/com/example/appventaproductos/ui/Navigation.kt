@@ -11,9 +11,11 @@ import com.example.appventaproductos.ui.screens.HomeScreen
 import com.example.appventaproductos.ui.screens.LoginScreen
 import com.example.appventaproductos.ui.screens.MenuScreen
 import com.example.appventaproductos.ui.screens.RegisterScreen
+import com.example.appventaproductos.ui.screens.RopaScreen
 import com.example.appventaproductos.viewmodel.CarriolaViewModel
 import com.example.appventaproductos.viewmodel.LoginViewModel
 import com.example.appventaproductos.viewmodel.MenuViewModel
+import com.example.appventaproductos.viewmodel.RopaViewModel
 
 @Composable
 fun Navigation() {
@@ -37,6 +39,10 @@ fun Navigation() {
         composable("carriola") {
             val viewModel: CarriolaViewModel = viewModel()
             CarriolaScreen(viewModel = viewModel, navController = navController)
+        }
+        composable("ropa") {
+            val viewModel: RopaViewModel = viewModel()
+            RopaScreen(viewModel = viewModel, navController = navController)
         }
     }
 }
