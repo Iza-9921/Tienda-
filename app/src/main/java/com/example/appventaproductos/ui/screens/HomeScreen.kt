@@ -17,6 +17,6 @@ fun HomeScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Bienvenido a Home")
+        Text("Bienvenido a home")
     }
 }

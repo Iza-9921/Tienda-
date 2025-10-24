@@ -1,11 +1,10 @@
-package com.example.appventaproductos.ui.components.texts
+package com.example.appventaproductos.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,15 +24,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.appventaproductos.R
 import com.example.appventaproductos.data.model.Carriola
 import com.example.appventaproductos.ui.theme.AppVentaProductosTheme
 
 @Composable
-fun CarriolaCard(l: Carriola, x: (Carriola) -> Unit) {
+fun CarriolaCard(Car: Carriola, onClick: (Carriola) -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Card(
             modifier = Modifier
-                .clickable { x(l) }
                 .padding(8.dp)
                 .height(250.dp)
                 .width(150.dp)
@@ -68,7 +67,7 @@ fun CarriolaCard(l: Carriola, x: (Carriola) -> Unit) {
 
                     Row {
                         Image(
-                            painter = painterResource(l.imagen),
+                            painter = painterResource(Car.imagen),
                             contentDescription = "Foto del producto",
                             modifier = Modifier
                                 .height(70.dp)
@@ -80,7 +79,7 @@ fun CarriolaCard(l: Carriola, x: (Carriola) -> Unit) {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = l.TítuloProducto,
+                                text = Car.TítuloProducto,
                                 fontSize = 13.sp,
                                 color = Color(0xFF293167),
                                 textAlign = TextAlign.Center,
@@ -103,7 +102,7 @@ fun CarriolaCard(l: Carriola, x: (Carriola) -> Unit) {
                             .padding(4.dp)
                     ) {
                         Text(
-                            text = l.Precio,
+                            text = Car.Precio,
                             color = Color(0xFF387C9D),
                             fontSize = 8.sp,
                             fontWeight = FontWeight.Bold,
@@ -129,7 +128,7 @@ fun CarriolaCard(l: Carriola, x: (Carriola) -> Unit) {
                                             modifier = Modifier.height(20.dp)
                                         )
                                         Text(
-                                            text = l.Condición,
+                                            text = Car.Condición,
                                             fontSize = 5.sp,
                                             textAlign = TextAlign.Center,
                                             modifier = Modifier.height(15.dp)
@@ -143,7 +142,7 @@ fun CarriolaCard(l: Carriola, x: (Carriola) -> Unit) {
                                             modifier = Modifier.height(20.dp)
                                         )
                                         Text(
-                                            text = l.Características,
+                                            text = Car.Características,
                                             fontSize = 5.sp,
                                             textAlign = TextAlign.Center,
                                             modifier = Modifier.height(15.dp)
@@ -157,7 +156,7 @@ fun CarriolaCard(l: Carriola, x: (Carriola) -> Unit) {
                                             modifier = Modifier.height(20.dp)
                                         )
                                         Text(
-                                            text = l.Peso,
+                                            text = Car.Peso,
                                             fontSize = 5.sp,
                                             textAlign = TextAlign.Center,
                                             modifier = Modifier.height(15.dp)
@@ -174,7 +173,7 @@ fun CarriolaCard(l: Carriola, x: (Carriola) -> Unit) {
                                             modifier = Modifier.height(20.dp)
                                         )
                                         Text(
-                                            text = l.Materiales,
+                                            text = Car.Materiales,
                                             fontSize = 5.sp,
                                             textAlign = TextAlign.Center,
                                             modifier = Modifier.height(15.dp)
@@ -188,7 +187,7 @@ fun CarriolaCard(l: Carriola, x: (Carriola) -> Unit) {
                                             modifier = Modifier.height(20.dp)
                                         )
                                         Text(
-                                            text = l.Rangoedad,
+                                            text = Car.Rangoedad,
                                             fontSize = 5.sp,
                                             textAlign = TextAlign.Center,
                                             modifier = Modifier.height(15.dp)
@@ -207,21 +206,23 @@ fun CarriolaCard(l: Carriola, x: (Carriola) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewCarriolaCard() {
-    val l = Carriola(
-        1,
-        com.example.appventaproductos.R.drawable.carriola,
-        "Carriola Modular Premium 3-en-1 (Moises, Asiento Reversible y Autoasiento",
-        "MXN 8,999.00",
-        "Nueva(Certificada y Sellada)",
-        "- Ruedas de goma todo terreno con suspensión en las 4 ruedas.\\n\" +\n" +
-                "                    \"    - Amplia canasta de almacenamiento inferior.\" +\n" +
-                "                    \"- Incluye: Portavasos y cubrepiés.\"",
-        "11.5 kg (Carriola con asiento)",
-        "Chasis de aluminio ligero de alta resistencia y textiles hipoalergénicos\"",
-        "0 Mese en adelante",
-        "Envío terrestre gratuito a todo el país (3-5 días hábiles)"
+    val c = Carriola(
+        id = 1,
+        imagen = R.drawable.carriola,
+        TítuloProducto = "Carriola Modular Premium 3-en-1 (Moises, Asiento Reversible y Autoasiento)",
+        Precio = "MXN 8,999.00",
+        Condición = "Nueva(Certificada y Sellada)",
+        Características = "- Ruedas de goma todo terreno con suspensión en las 4 ruedas.\n" +
+                "    - Amplia canasta de almacenamiento inferior." +
+                "- Incluye: Portavasos y cubrepiés.",
+        Peso = "11.5 kg (Carriola con asiento)",
+        Materiales = "Chasis de aluminio ligero de alta resistencia y textiles hipoalergénicos",
+        Rangoedad = "0 Mese en adelante",
+        metodoEnvio = "Envío terrestre gratuito a todo el país (3-5 días hábiles)"
+
+
     )
     AppVentaProductosTheme {
-        CarriolaCard(l) {}
+        CarriolaCard(Car = c, onClick =  {})
     }
 }

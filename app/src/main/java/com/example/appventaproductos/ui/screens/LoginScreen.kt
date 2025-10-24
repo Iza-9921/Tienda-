@@ -1,3 +1,4 @@
+// LoginScreen.kt
 package com.example.appventaproductos.ui.screens
 
 import android.annotation.SuppressLint
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SearchBarDefaults.InputField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -63,6 +63,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
 
         PrimaryButton("Iniciar sesión") {
             viewModel.login {
+                // Navegar a "home" — en tu NavHost la pantalla principal se llama "home"
                 navController.navigate("menu") {
                     popUpTo("login") { inclusive = true } // Evita volver al login
                 }

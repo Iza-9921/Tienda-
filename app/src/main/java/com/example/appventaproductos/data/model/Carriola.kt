@@ -13,6 +13,6 @@ data class Carriola(
     val Peso: String,
     val Materiales: String,
     val Rangoedad: String,
-    val metodoenvio: String,
+    val metodoEnvio: String,
 
     )

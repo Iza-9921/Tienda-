@@ -1,8 +1,8 @@
+// LoginViewModel.kt
 package com.example.appventaproductos.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-
 
 class LoginViewModel : ViewModel() {
     var password = mutableStateOf("")
