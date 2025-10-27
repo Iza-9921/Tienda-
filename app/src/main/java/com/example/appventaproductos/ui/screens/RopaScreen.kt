@@ -1,10 +1,12 @@
 package com.example.appventaproductos.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -27,6 +29,11 @@ fun RopaScreen(
             CenterAlignedTopAppBar(
                 title = { Text("Ropa de bebé") }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { navController.navigate("product/add/ropa") }) {
+                Icon(Icons.Filled.Add, contentDescription = "Añadir ropa")
+            }
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { inner ->

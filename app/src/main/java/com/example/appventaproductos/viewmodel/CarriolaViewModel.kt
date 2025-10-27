@@ -13,7 +13,6 @@ class CarriolaViewModel : ViewModel() {
     val carriola: StateFlow<List<Carriola>> = _carriola
 
     init {
-        // Estado inicial de ejemplo (puedes reemplazar por carga remota)
         _carriola.value = listOf(
             Carriola(
                 id = 1,
@@ -44,17 +43,26 @@ class CarriolaViewModel : ViewModel() {
         )
     }
 
-    fun getById(id: Int): Carriola? = _carriola.value.firstOrNull { it.id == id }  // útil para la pantalla de detalle [web:59]
+    fun getById(id: Int): Carriola? = _carriola.value.firstOrNull { it.id == id }
 
     fun addCarriola(item: Carriola) {
-        _carriola.update { it + item }  // ejemplo de mutación de estado inmutable [web:57]
+        _carriola.update { it + item }
+    }
+
+    fun replaceById(id: Int, nuevo: Carriola) {
+        val lista = _carriola.value.toMutableList()
+        val index = lista.indexOfFirst { it.id == id }
+        if (index != -1) {
+            lista[index] = nuevo
+            _carriola.value = lista
+        }
     }
 
     fun removeById(id: Int) {
-        _carriola.update { it.filterNot { c -> c.id == id } }  // ejemplo de eliminación [web:57]
+        _carriola.update { it.filterNot { c -> c.id == id } }
     }
 
     fun clickPerson(carriola: Carriola) {
-        println("Has hecho click en: ${carriola.TítuloProducto}")  // logging local [web:59]
+        println("Has hecho click en: ${carriola.TítuloProducto}")
     }
 }

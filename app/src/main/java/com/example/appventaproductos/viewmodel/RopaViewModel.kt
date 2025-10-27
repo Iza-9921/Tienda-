@@ -1,11 +1,11 @@
 package com.example.appventaproductos.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.example.appventaproductos.R
 import com.example.appventaproductos.data.model.Ropa
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import com.example.appventaproductos.R
 
 class RopaViewModel : ViewModel() {
 
@@ -13,7 +13,6 @@ class RopaViewModel : ViewModel() {
     val ropa: StateFlow<List<Ropa>> = _ropa
 
     init {
-
         _ropa.value = listOf(
             Ropa(
                 id = 1,
@@ -63,7 +62,6 @@ class RopaViewModel : ViewModel() {
                 Rangoedad = "9 - 12 meses",
                 metodoEnvio = "Envío express disponible"
             )
-
         )
     }
 
@@ -71,6 +69,15 @@ class RopaViewModel : ViewModel() {
 
     fun addRopa(item: Ropa) {
         _ropa.update { it + item }
+    }
+
+    fun replaceById(id: Int, nuevo: Ropa) {
+        val lista = _ropa.value.toMutableList()
+        val index = lista.indexOfFirst { it.id == id }
+        if (index != -1) {
+            lista[index] = nuevo
+            _ropa.value = lista
+        }
     }
 
     fun removeById(id: Int) {

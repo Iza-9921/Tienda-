@@ -1,4 +1,3 @@
-// LoginViewModel.kt
 package com.example.appventaproductos.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
