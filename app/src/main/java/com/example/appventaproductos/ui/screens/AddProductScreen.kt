@@ -50,9 +50,6 @@ fun AddProductScreen(
     navController: NavHostController,
     initialCategory: String // "ropa" | "carriola" | "accesorios"
 ) {
-    val ropaVM: RopaViewModel = viewModel()
-    val carriolaVM: CarriolaViewModel = viewModel()
-    val accesoriosVM: AccesoriosViewModel = viewModel()
 
     var nombre by rememberSaveable { mutableStateOf("") }
     var precio by rememberSaveable { mutableStateOf("") }
@@ -93,16 +90,9 @@ fun AddProductScreen(
                     return@FloatingActionButton
                 }
 
-                val newId = when (categoria) {
-                    "ropa" -> (ropaVM.ropa.value.maxOfOrNull { it.id } ?: 0) + 1
-                    "carriola" -> (carriolaVM.carriola.value.maxOfOrNull { it.id } ?: 0) + 1
-                    else -> (accesoriosVM.accesorios.value.maxOfOrNull { it.id } ?: 0) + 1
-                }
-
                 when (categoria) {
                     "ropa" -> ropaVM.addRopa(
                         Ropa(
-                            id = newId,
                             imagen = defaultImage, // TODO: save image URI
                             TítuloProducto = nombre,
                             Precio = precio,
@@ -116,7 +106,6 @@ fun AddProductScreen(
                     )
                     "carriola" -> carriolaVM.addCarriola(
                         Carriola(
-                            id = newId,
                             imagen = defaultImage, // TODO: save image URI
                             TítuloProducto = nombre,
                             Precio = precio,
@@ -130,7 +119,6 @@ fun AddProductScreen(
                     )
                     "accesorios" -> accesoriosVM.addAccesorios(
                         Accesorios(
-                            id = newId,
                             imagen = defaultImage, // TODO: save image URI
                             TítuloProducto = nombre,
                             Precio = precio,
@@ -187,7 +175,6 @@ fun AddProductScreen(
                         .menuAnchor()
                         .fillMaxWidth()
                 )
-                ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     categorias.forEach { c ->
                         DropdownMenuItem(
                             text = { Text(c) },

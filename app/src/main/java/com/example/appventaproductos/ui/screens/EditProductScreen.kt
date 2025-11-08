@@ -3,7 +3,6 @@ package com.example.appventaproductos.ui.screens
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -20,7 +19,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -54,44 +52,13 @@ fun EditProductScreen(
     category: String,
     id: Int
 ) {
-    val ropaVM: RopaViewModel = viewModel()
-    val carriolaVM: CarriolaViewModel = viewModel()
-    val accesoriosVM: AccesoriosViewModel = viewModel()
 
-    val currentNombre: String
-    val currentPrecio: String
-    val currentDescripcion: String
-    val currentImg: Any
 
-    when (category) {
-        "ropa" -> {
-            val item = ropaVM.getById(id)
-            currentNombre = item?.TítuloProducto ?: ""
-            currentPrecio = item?.Precio ?: ""
-            currentDescripcion = item?.Características ?: ""
-            currentImg = item?.imagen ?: R.drawable.unisex
-        }
-        "carriola" -> {
-            val item = carriolaVM.getById(id)
-            currentNombre = item?.TítuloProducto ?: ""
-            currentPrecio = item?.Precio ?: ""
-            currentDescripcion = item?.Características ?: ""
-            currentImg = item?.imagen ?: R.drawable.carriola
-        }
-        else -> {
-            val item = accesoriosVM.getById(id)
-            currentNombre = item?.TítuloProducto ?: ""
-            currentPrecio = item?.Precio ?: ""
-            currentDescripcion = item?.Características ?: ""
-            currentImg = item?.imagen ?: R.drawable.monitor
-        }
     }
-
-    var nombre by rememberSaveable { mutableStateOf(currentNombre) }
-    var precio by rememberSaveable { mutableStateOf(currentPrecio) }
-    var categoria by rememberSaveable { mutableStateOf(category) }
-    var descripcion by rememberSaveable { mutableStateOf(currentDescripcion) }
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
+            }
+            else -> {
+            }
+        }
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -118,197 +85,144 @@ fun EditProductScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                val changed = nombre != currentNombre ||
-                        precio != currentPrecio ||
-                        descripcion != currentDescripcion ||
-                        categoria != category ||
-                        imageUri != null
+                            imageUri != null
 
-                if (!changed) {
-                    showNoChangeDialog = true
-                    return@FloatingActionButton
-                }
+                    if (!changed) {
+                        showNoChangeDialog = true
+                        return@FloatingActionButton
+                    }
 
-                when (categoria) {
-                    "ropa" -> {
-                        val nuevo = Ropa(
-                            id = id,
-                            imagen = currentImg as Int, // TODO: save image URI
-                            TítuloProducto = nombre,
-                            Precio = precio,
-                            Condición = "Nuevo",
-                            Características = descripcion,
-                            Talla = "Única",
-                            Materiales = "N/A",
-                            Rangoedad = "N/A",
-                            metodoEnvio = "Envío estándar"
-                        )
-                        if (category != "ropa") {
-                            when (category) {
-                                "carriola" -> carriolaVM.removeById(id)
-                                "accesorios" -> accesoriosVM.removeById(id)
+                    when (categoria) {
+                        "ropa" -> {
+                                TítuloProducto = nombre,
+                                Precio = precio,
+                                Condición = "Nuevo",
+                                Características = descripcion,
+                                Talla = "Única",
+                                Materiales = "N/A",
+                                Rangoedad = "N/A",
+                                metodoEnvio = "Envío estándar"
+                            )
+                                    "carriola" -> carriolaVM.removeById(id)
+                                    "accesorios" -> accesoriosVM.removeById(id)
+                                }
+                            } else {
                             }
-                            ropaVM.addRopa(nuevo)
-                        } else {
-                            ropaVM.replaceById(id, nuevo)
+                        }
+                        "carriola" -> {
+                                TítuloProducto = nombre,
+                                Precio = precio,
+                                Condición = "Nuevo",
+                                Características = descripcion,
+                                Peso = "N/A",
+                                Materiales = "N/A",
+                                Rangoedad = "N/A",
+                                metodoEnvio = "Envío estándar"
+                            )
+                                    "ropa" -> ropaVM.removeById(id)
+                                    "accesorios" -> accesoriosVM.removeById(id)
+                                }
+                            } else {
+                            }
+                        }
+                        else -> {
+                                TítuloProducto = nombre,
+                                Precio = precio,
+                                Características = descripcion,
+                                Materiales = "N/A",
+                                Rangoedad = "N/A",
+                                metodoEnvio = "Envío estándar"
+                            )
+                                    "ropa" -> ropaVM.removeById(id)
+                                    "carriola" -> carriolaVM.removeById(id)
+                                }
+                            } else {
+                            }
                         }
                     }
-                    "carriola" -> {
-                        val nuevo = Carriola(
-                            id = id,
-                            imagen = currentImg as Int, // TODO: save image URI
-                            TítuloProducto = nombre,
-                            Precio = precio,
-                            Condición = "Nuevo",
-                            Características = descripcion,
-                            Peso = "N/A",
-                            Materiales = "N/A",
-                            Rangoedad = "N/A",
-                            metodoEnvio = "Envío estándar"
-                        )
-                        if (category != "carriola") {
-                            when (category) {
-                                "ropa" -> ropaVM.removeById(id)
-                                "accesorios" -> accesoriosVM.removeById(id)
-                            }
-                            carriolaVM.addCarriola(nuevo)
-                        } else {
-                            carriolaVM.replaceById(id, nuevo)
-                        }
-                    }
-                    else -> {
-                        val nuevo = Accesorios(
-                            id = id,
-                            imagen = currentImg as Int, // TODO: save image URI
-                            TítuloProducto = nombre,
-                            Precio = precio,
-                            Características = descripcion,
-                            Materiales = "N/A",
-                            Rangoedad = "N/A",
-                            metodoEnvio = "Envío estándar"
-                        )
-                        if (category != "accesorios") {
-                            when (category) {
-                                "ropa" -> ropaVM.removeById(id)
-                                "carriola" -> carriolaVM.removeById(id)
-                            }
-                            accesoriosVM.addAccesorios(nuevo)
-                        } else {
-                            accesoriosVM.replaceById(id, nuevo)
-                        }
-                    }
-                }
 
-                showSavedDialog = true
-            }) {
+                    showSavedDialog = true
                 Icon(Icons.Filled.Check, contentDescription = "Guardar cambios")
             }
         }
     ) { inner ->
-        Column(
-            modifier = Modifier
-                .padding(inner)
-                .padding(16.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            OutlinedTextField(
-                value = nombre,
-                onValueChange = { nombre = it },
-                label = { Text("Nombre de producto") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = precio,
-                onValueChange = { precio = it },
-                label = { Text("Precio") },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Decimal
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            var expanded by remember { mutableStateOf(false) }
-            ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
+            Column(
+                modifier = Modifier
+                    .padding(inner)
+                    .padding(16.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 OutlinedTextField(
-                    value = categoria,
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text("Categoría") },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                    modifier = Modifier
-                        .menuAnchor()
-                        .fillMaxWidth()
+                    value = nombre,
+                    onValueChange = { nombre = it },
+                    label = { Text("Nombre de producto") },
+                    modifier = Modifier.fillMaxWidth()
                 )
-                ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    categorias.forEach { c ->
-                        DropdownMenuItem(
-                            text = { Text(c) },
-                            onClick = { categoria = c; expanded = false }
-                        )
+                OutlinedTextField(
+                    value = precio,
+                    onValueChange = { precio = it },
+                    label = { Text("Precio") },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Decimal
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                var expanded by remember { mutableStateOf(false) }
+                ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
+                    OutlinedTextField(
+                        value = categoria,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Categoría") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                    )
+                        categorias.forEach { c ->
+                            DropdownMenuItem(
+                                text = { Text(c) },
+                            )
+                        }
                     }
                 }
-            }
 
-            OutlinedTextField(
-                value = descripcion,
-                onValueChange = { descripcion = it },
-                label = { Text("Descripción") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 120.dp),
-                singleLine = false,
-                maxLines = 6
-            )
-
-            Text(text = "Foto del producto")
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(160.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                AsyncImage(
-                    model = imageUri ?: currentImg,
-                    contentDescription = "Imagen de producto",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
+                OutlinedTextField(
+                    value = descripcion,
+                    onValueChange = { descripcion = it },
+                    label = { Text("Descripción") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 120.dp),
+                    singleLine = false,
+                    maxLines = 6
                 )
-            }
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(onClick = { imagePicker.launch("image/*") }) { Text("Cambiar") }
-                OutlinedButton(
-                    onClick = {
-                        when (category) {
-                            "ropa" -> ropaVM.removeById(id)
-                            "carriola" -> carriolaVM.removeById(id)
-                            else -> accesoriosVM.removeById(id)
-                        }
-                        showDeletedDialog = true
-                    }
-                ) { Text("Eliminar") }
-            }
 
-            Spacer(Modifier.height(16.dp))
-            Button(
-                onClick = {
-                    when (category) {
-                        "ropa" -> ropaVM.removeById(id)
-                        "carriola" -> carriolaVM.removeById(id)
-                        else -> accesoriosVM.removeById(id)
-                    }
-                    showDeletedDialog = true
-                },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer,
-                    contentColor = MaterialTheme.colorScheme.onErrorContainer
-                )
-            ) { Text("Eliminar producto") }
+                Text(text = "Foto del producto")
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(160.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    AsyncImage(
+                        contentDescription = "Imagen de producto",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(onClick = { imagePicker.launch("image/*") }) { Text("Cambiar") }
+                    Button(
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer
+                        )
         }
     }
 
@@ -342,7 +256,6 @@ fun EditProductScreen(
                     navController.popBackStack()
                 }) { Text("OK") }
             },
-            title = { Text("Producto eliminado correctamente") },
             text = { Text("Se eliminó el producto y volverás a la lista") }
         )
     }

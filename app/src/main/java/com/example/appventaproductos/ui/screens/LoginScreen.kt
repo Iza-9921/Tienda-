@@ -42,7 +42,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
     ) {
         CircularImage(R.drawable.descarga)
         Title("VALENTINA BABYS")
-
+ 
         UserInputField(
             viewModel = viewModel,
             label = "Usuario"

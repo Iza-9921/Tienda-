@@ -44,6 +44,7 @@ fun RegisterScreen(navController: NavController) {
             label = { Text("Nombre") },
             singleLine = true
         )
+        //apellido
         TextField(
             value = apellido,
             onValueChange = {
@@ -53,7 +54,6 @@ fun RegisterScreen(navController: NavController) {
             label = { Text("Apellido") },
             singleLine = true
         )
-
         // Correo
         TextField(
             value = email,
