@@ -1,60 +1,68 @@
 package com.example.appventaproductos.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
-import com.example.appventaproductos.R
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.appventaproductos.data.local.AppDatabase
 import com.example.appventaproductos.data.model.Carriola
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.appventaproductos.data.repository.ProductRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class CarriolaViewModel : ViewModel() {
+class CarriolaViewModel(private val repository: ProductRepository) : ViewModel() {
 
-    private val _carriola = MutableStateFlow<List<Carriola>>(emptyList())
-    val carriola: StateFlow<List<Carriola>> = _carriola
+    val carriola: StateFlow<List<Carriola>> = repository
+        .getCarriolas()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     init {
-        // Estado inicial de ejemplo (puedes reemplazar por carga remota)
-        _carriola.value = listOf(
-            Carriola(
-                id = 1,
-                imagen = R.drawable.carriola,
-                TítuloProducto = "Carriola Modular Premium 3-en-1 (Moises, Asiento Reversible y Autoasiento)",
-                Precio = "MXN 8,999.00",
-                Condición = "Nueva (Certificada y Sellada)",
-                Características = "- Ruedas de goma todo terreno con suspensión en las 4 ruedas.\n" +
-                        " - Amplia canasta de almacenamiento inferior.\n" +
-                        " - Incluye: Portavasos y cubrepiés.",
-                Peso = "11.5 kg (Carriola con asiento)",
-                Materiales = "Chasis de aluminio ligero de alta resistencia y textiles hipoalergénicos",
-                Rangoedad = "0 meses en adelante",
-                metodoEnvio = "Envío terrestre gratuito a todo el país (3-5 días hábiles)"
-            ),
-            Carriola(
-                id = 2,
-                imagen = R.drawable.carriola1,
-                TítuloProducto = "Carriola Ultra Ligera de Viaje",
-                Precio = "MXN 3,450.00",
-                Condición = "Nueva (Certificada por fabricante)",
-                Características = "- Diseño ultra compacto, apto para cabina de avión.\n- Peso pluma, fácil de transportar.",
-                Peso = "2.6 kg",
-                Materiales = "Marco de acero reforzado",
-                Rangoedad = "A partir de los 6 meses",
-                metodoEnvio = "Envío Express (24-48 horas)"
-            )
-        )
+        viewModelScope.launch {
+            repository.seedCarriolaIfNeeded()
+        }
     }
 
-    fun getById(id: Int): Carriola? = _carriola.value.firstOrNull { it.id == id }  // útil para la pantalla de detalle [web:59]
+    fun getById(id: Int): Flow<Carriola?> = repository.getCarriolaById(id)
 
     fun addCarriola(item: Carriola) {
-        _carriola.update { it + item }  // ejemplo de mutación de estado inmutable [web:57]
+        viewModelScope.launch {
+            repository.insertCarriola(item)
+        }
+    }
+
+    fun updateCarriola(item: Carriola) {
+        viewModelScope.launch {
+            repository.updateCarriola(item)
+        }
     }
 
     fun removeById(id: Int) {
-        _carriola.update { it.filterNot { c -> c.id == id } }  // ejemplo de eliminación [web:57]
+        viewModelScope.launch {
+            repository.deleteCarriola(id)
+        }
     }
 
     fun clickPerson(carriola: Carriola) {
-        println("Has hecho click en: ${carriola.TítuloProducto}")  // logging local [web:59]
+        println("Has hecho click en: ${carriola.TítuloProducto}")
+    }
+
+    companion object {
+        val Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as Application)
+                val database = AppDatabase.getInstance(application)
+                val repository = ProductRepository(
+                    database.ropaDao(),
+                    database.carriolaDao(),
+                    database.accesorioDao()
+                )
+                CarriolaViewModel(repository)
+            }
+        }
     }
 }

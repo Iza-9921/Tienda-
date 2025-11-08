@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -50,6 +51,9 @@ fun AddProductScreen(
     navController: NavHostController,
     initialCategory: String // "ropa" | "carriola" | "accesorios"
 ) {
+    val ropaVM: RopaViewModel = viewModel(factory = RopaViewModel.Factory)
+    val carriolaVM: CarriolaViewModel = viewModel(factory = CarriolaViewModel.Factory)
+    val accesoriosVM: AccesoriosViewModel = viewModel(factory = AccesoriosViewModel.Factory)
 
     var nombre by rememberSaveable { mutableStateOf("") }
     var precio by rememberSaveable { mutableStateOf("") }
@@ -93,6 +97,7 @@ fun AddProductScreen(
                 when (categoria) {
                     "ropa" -> ropaVM.addRopa(
                         Ropa(
+                            id = 0,
                             imagen = defaultImage, // TODO: save image URI
                             TítuloProducto = nombre,
                             Precio = precio,
@@ -106,6 +111,7 @@ fun AddProductScreen(
                     )
                     "carriola" -> carriolaVM.addCarriola(
                         Carriola(
+                            id = 0,
                             imagen = defaultImage, // TODO: save image URI
                             TítuloProducto = nombre,
                             Precio = precio,
@@ -119,6 +125,7 @@ fun AddProductScreen(
                     )
                     "accesorios" -> accesoriosVM.addAccesorios(
                         Accesorios(
+                            id = 0,
                             imagen = defaultImage, // TODO: save image URI
                             TítuloProducto = nombre,
                             Precio = precio,
@@ -175,6 +182,7 @@ fun AddProductScreen(
                         .menuAnchor()
                         .fillMaxWidth()
                 )
+                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     categorias.forEach { c ->
                         DropdownMenuItem(
                             text = { Text(c) },

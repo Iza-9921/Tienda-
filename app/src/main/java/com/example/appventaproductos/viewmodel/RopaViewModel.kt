@@ -1,83 +1,68 @@
 package com.example.appventaproductos.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.appventaproductos.data.local.AppDatabase
 import com.example.appventaproductos.data.model.Ropa
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.appventaproductos.data.repository.ProductRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import com.example.appventaproductos.R
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class RopaViewModel : ViewModel() {
+class RopaViewModel(private val repository: ProductRepository) : ViewModel() {
 
-    private val _ropa = MutableStateFlow<List<Ropa>>(emptyList())
-    val ropa: StateFlow<List<Ropa>> = _ropa
+    val ropa: StateFlow<List<Ropa>> = repository
+        .getRopa()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     init {
-
-        _ropa.value = listOf(
-            Ropa(
-                id = 1,
-                imagen = R.drawable.unisex,
-                TítuloProducto = "Body algodón manga larga - Rosa con ositos",
-                Precio = "MXN 199.00",
-                Condición = "Nuevo",
-                Características = "Botones de presión en la entrepierna, costuras suaves, estampado resistente al lavado.",
-                Talla = "0-3 M",
-                Materiales = "Algodón 100% (peinado, hipoalergénico)",
-                Rangoedad = "0 - 3 meses",
-                metodoEnvio = "Envío a domicilio (Paquetería) — 3-5 días hábiles"
-            ),
-            Ropa(
-                id = 2,
-                imagen = R.drawable.pijama,
-                TítuloProducto = "Set pijama 2 piezas - Estrellas",
-                Precio = "MXN 349.00",
-                Condición = "Nuevo",
-                Características = "Incluye pijama y gorro. Cierre con broches, tela suave para dormir.",
-                Talla = "3-6 M",
-                Materiales = "Algodón peinado 95% / Elastano 5%",
-                Rangoedad = "3 - 6 meses",
-                metodoEnvio = "Recoger en tienda / Envío estándar"
-            ),
-            Ropa(
-                id = 3,
-                imagen = R.drawable.unisex,
-                TítuloProducto = "Enterizo sin mangas unisex - Beige",
-                Precio = "MXN 259.00",
-                Condición = "Nuevo",
-                Características = "Apertura inferior con broches, tejido transpirable.",
-                Talla = "6-9 M",
-                Materiales = "Algodón orgánico 100%",
-                Rangoedad = "6 - 9 meses",
-                metodoEnvio = "Envío a domicilio (Paquetería)"
-            ),
-            Ropa(
-                id = 4,
-                imagen = R.drawable.sudadera,
-                TítuloProducto = "Sudadera con capucha 'Osito' - Gris",
-                Precio = "MXN 429.00",
-                Condición = "Nuevo",
-                Características = "Forro polar ligero, capucha con orejitas, cierre frontal.",
-                Talla = "9-12 M",
-                Materiales = "Poliéster 80% / Algodón 20%",
-                Rangoedad = "9 - 12 meses",
-                metodoEnvio = "Envío express disponible"
-            )
-
-        )
+        viewModelScope.launch {
+            repository.seedRopaIfNeeded()
+        }
     }
 
-    fun getById(id: Int): Ropa? = _ropa.value.firstOrNull { it.id == id }
+    fun getById(id: Int): Flow<Ropa?> = repository.getRopaById(id)
 
     fun addRopa(item: Ropa) {
-        _ropa.update { it + item }
+        viewModelScope.launch {
+            repository.insertRopa(item)
+        }
+    }
+
+    fun updateRopa(item: Ropa) {
+        viewModelScope.launch {
+            repository.updateRopa(item)
+        }
     }
 
     fun removeById(id: Int) {
-        _ropa.update { it.filterNot { r -> r.id == id } }
+        viewModelScope.launch {
+            repository.deleteRopa(id)
+        }
     }
 
     fun clickRopa(ropa: Ropa) {
         println("Has hecho click en: ${ropa.TítuloProducto}")
+    }
+
+    companion object {
+        val Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as Application)
+                val database = AppDatabase.getInstance(application)
+                val repository = ProductRepository(
+                    database.ropaDao(),
+                    database.carriolaDao(),
+                    database.accesorioDao()
+                )
+                RopaViewModel(repository)
+            }
+        }
     }
 }

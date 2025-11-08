@@ -2,54 +2,92 @@ package com.example.appventaproductos.ui
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.appventaproductos.data.model.Accesorios
-import com.example.appventaproductos.ui.screens.AccesoriosScreen
-import com.example.appventaproductos.ui.screens.CarriolaScreen
-import com.example.appventaproductos.ui.screens.ForgotPasswordScreen
-import com.example.appventaproductos.ui.screens.HomeScreen
-import com.example.appventaproductos.ui.screens.LoginScreen
-import com.example.appventaproductos.ui.screens.MenuScreen
-import com.example.appventaproductos.ui.screens.RegisterScreen
-import com.example.appventaproductos.ui.screens.RopaScreen
-import com.example.appventaproductos.viewmodel.AccesoriosViewModel
-import com.example.appventaproductos.viewmodel.CarriolaViewModel
-import com.example.appventaproductos.viewmodel.LoginViewModel
-import com.example.appventaproductos.viewmodel.MenuViewModel
-import com.example.appventaproductos.viewmodel.RopaViewModel
+import androidx.navigation.navArgument
+import com.example.appventaproductos.ui.screens.*
+import com.example.appventaproductos.viewmodel.*
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "login") {
+
+        // Autenticación y entrada
         composable("login") {
-            val viewModel: LoginViewModel = viewModel()
-            LoginScreen(viewModel = viewModel, navController = navController)
+            val vm: LoginViewModel = viewModel()
+            LoginScreen(viewModel = vm, navController = navController)
         }
         composable("forgot_password") { ForgotPasswordScreen(navController) }
         composable("register") { RegisterScreen(navController) }
         composable("home") { HomeScreen(navController) }
 
-
+        // Menú principal
         composable("menu") {
-            val  viewModel: MenuViewModel = viewModel()
-            MenuScreen(viewModel = viewModel, navController = navController)
+            val vm: MenuViewModel = viewModel()
+            MenuScreen(viewModel = vm, navController = navController)
         }
-        //ruta de carriola
+
+        // Listas por categoría
         composable("carriola") {
-            val viewModel: CarriolaViewModel = viewModel()
-            CarriolaScreen(viewModel = viewModel, navController = navController)
+            val vm: CarriolaViewModel = viewModel(factory = CarriolaViewModel.Factory)
+            CarriolaScreen(viewModel = vm, navController = navController)
         }
         composable("ropa") {
-            val viewModel: RopaViewModel = viewModel()
-            RopaScreen(viewModel = viewModel, navController = navController)
+            val vm: RopaViewModel = viewModel(factory = RopaViewModel.Factory)
+            RopaScreen(viewModel = vm, navController = navController)
         }
         composable("accesorios") {
-            val viewModel: AccesoriosViewModel = viewModel()
-            AccesoriosScreen(viewModel = viewModel, navController = navController)
+            val vm: AccesoriosViewModel = viewModel(factory = AccesoriosViewModel.Factory)
+            AccesoriosScreen(viewModel = vm, navController = navController)
+        }
+
+        // Navegaciones dinámicas usadas por tus listas: "{categoria}/{id}"
+        composable(
+            route = "ropa/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStack ->
+            val id = backStack.arguments?.getInt("id") ?: -1
+            EditProductScreen(navController = navController, category = "ropa", id = id)
+        }
+        composable(
+            route = "carriola/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStack ->
+            val id = backStack.arguments?.getInt("id") ?: -1
+            EditProductScreen(navController = navController, category = "carriola", id = id)
+        }
+        composable(
+            route = "accesorios/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStack ->
+            val id = backStack.arguments?.getInt("id") ?: -1
+            EditProductScreen(navController = navController, category = "accesorios", id = id)
+        }
+
+        // Agregar producto (abre formulario con categoría inicial)
+        composable(
+            route = "product/add/{category}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType })
+        ) { backStack ->
+            val category = backStack.arguments?.getString("category") ?: "ropa"
+            AddProductScreen(navController = navController, initialCategory = category)
+        }
+
+        // Editar producto genérico con categoría e id
+        composable(
+            route = "product/edit/{category}/{id}",
+            arguments = listOf(
+                navArgument("category") { type = NavType.StringType },
+                navArgument("id") { type = NavType.IntType }
+            )
+        ) { backStack ->
+            val category = backStack.arguments?.getString("category") ?: "ropa"
+            val id = backStack.arguments?.getInt("id") ?: -1
+            EditProductScreen(navController = navController, category = category, id = id)
         }
     }
 }
