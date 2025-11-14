@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.appventaproductos.ui.components.CarriolaList
 import com.example.appventaproductos.viewmodel.CarriolaViewModel
@@ -18,26 +19,38 @@ import com.example.appventaproductos.viewmodel.CarriolaViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarriolaScreen(
-    viewModel: CarriolaViewModel,
     navController: NavHostController
 ) {
-    val lista by viewModel.carriola.collectAsState(initial = emptyList())
+    val viewModel: CarriolaViewModel = viewModel(factory = CarriolaViewModel.Factory)
+    val lista by viewModel.carriolaList.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Carriolas") }
+                title = { Text("Carriola") }
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("product/add/carriola") }) {
+            FloatingActionButton(onClick = {
+                navController.navigate("product/add/carriola")
+            }) {
                 Icon(Icons.Filled.Add, contentDescription = "Añadir carriola")
             }
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { inner ->
-        if (lista.isEmpty()) {
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .padding(inner)
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else if (lista.isEmpty()) {
             Box(
                 modifier = Modifier
                     .padding(inner)
@@ -49,7 +62,6 @@ fun CarriolaScreen(
         } else {
             Column(Modifier.padding(inner)) {
                 CarriolaList(lista) { item ->
-                    // Guarda selección si hace falta y navega al detalle
                     navController.navigate("carriola/${item.id}")
                 }
                 Spacer(Modifier.height(8.dp))

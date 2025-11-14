@@ -4,18 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.appventaproductos.data.model.Carriola
+import com.example.appventaproductos.data.model.Accesorio
 import com.example.appventaproductos.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.io.File
 
-class CarriolaViewModel(private val repository: ProductRepository = ProductRepository()) : ViewModel() {
+class AccesorioViewModel(private val repository: ProductRepository = ProductRepository()) : ViewModel() {
 
-    private val _carriolaList = MutableStateFlow<List<Carriola>>(emptyList())
-    val carriolaList: StateFlow<List<Carriola>> = _carriolaList.asStateFlow()
+    private val _accesorioList = MutableStateFlow<List<Accesorio>>(emptyList())
+    val accesorioList: StateFlow<List<Accesorio>> = _accesorioList.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -24,37 +23,36 @@ class CarriolaViewModel(private val repository: ProductRepository = ProductRepos
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
     init {
-        loadCarriola()
+        loadAccesorio()
     }
 
-    fun loadCarriola() {
+    fun loadAccesorio() {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                _carriolaList.value = repository.getCarriolas()
+                _accesorioList.value = repository.getAccesorios()
             } catch (e: Exception) {
-                _errorMessage.value = "Error al cargar carriola: ${e.message}"
+                _errorMessage.value = "Error al cargar accesorio: ${e.message}"
             } finally {
                 _isLoading.value = false
             }
         }
     }
 
-    fun createCarriola(marca: String, modelo: String, precio: Double, imagenFile: File?) {
+    fun createAccesorio(accesorio: Accesorio) {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                print("Lo que sea")
-                val nuevaCarriola = repository.createCarriola(marca, modelo, precio, imagenFile)
-                if (nuevaCarriola != null) {
-                    loadCarriola()
+                val nuevoAccesorio = repository.createAccesorio(accesorio)
+                if (nuevoAccesorio != null) {
+                    loadAccesorio()
                 } else {
-                    _errorMessage.value = "Error al crear carriola"
+                    _errorMessage.value = "Error al crear accesorio"
                 }
             } catch (e: Exception) {
-                _errorMessage.value = "Error al crear carriola: ${e.message}"
+                _errorMessage.value = "Error al crear accesorio: ${e.message}"
             } finally {
                 _isLoading.value = false
             }
@@ -68,7 +66,7 @@ class CarriolaViewModel(private val repository: ProductRepository = ProductRepos
     companion object {
         val Factory = viewModelFactory {
             initializer {
-                CarriolaViewModel()
+                AccesorioViewModel()
             }
         }
     }

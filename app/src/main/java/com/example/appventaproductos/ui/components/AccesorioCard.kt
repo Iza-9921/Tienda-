@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,27 +26,27 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.appventaproductos.data.model.Ropa
+import com.example.appventaproductos.data.model.Accesorio
 import com.example.appventaproductos.ui.theme.AppVentaProductosTheme
 import com.example.appventaproductos.R
 
 @Composable
-fun RopaCard(
-    ropa: Ropa,
-    onClick: (Ropa) -> Unit
+fun AccesorioCard(
+    accesorio: Accesorio,
+    onClick: (Accesorio) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
     ElevatedCard(
-        onClick = { onClick(ropa) },
+        onClick = { onClick(accesorio) },
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(3f / 4f)
     ) {
         Column(Modifier.fillMaxSize()) {
             AsyncImage(
-                model = ropa.imagenUrl ?: R.drawable.unisex,
-                contentDescription = ropa.nombre,
+                model = accesorio.imagenUrl ?: R.drawable.monitor,
+                contentDescription = accesorio.nombre,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
@@ -60,7 +59,7 @@ fun RopaCard(
                     .padding(12.dp)
             ) {
                 Text(
-                    text = ropa.nombre,
+                    text = accesorio.nombre,
                     style = MaterialTheme.typography.titleSmall,
                     maxLines = if (expanded) Int.MAX_VALUE else 2,
                     overflow = TextOverflow.Ellipsis
@@ -74,34 +73,23 @@ fun RopaCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "$${ropa.precio}",
+                        text = "$${accesorio.precio}",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold
                     )
-                    AssistChip(
-                        onClick = { /* informativo */ },
-                        label = {
-                            Text(
-                                "Nuevo",
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
+                    Text(
+                        text = accesorio.tipo,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
 
                 Spacer(Modifier.height(6.dp))
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Text(
-                        text = "Talla: ${ropa.talla}",
-                        style = MaterialTheme.typography.labelMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
                     TextButton(onClick = { expanded = !expanded }) {
                         Text(if (expanded) "Ver menos" else "Ver más")
                     }
@@ -110,17 +98,8 @@ fun RopaCard(
                 if (expanded) {
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = "Nombre: ${ropa.nombre}",
-                        style = MaterialTheme.typography.bodySmall,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Spacer(Modifier.height(4.dp))
-                    Text(
-                        text = "Talla: ${ropa.talla}",
-                        style = MaterialTheme.typography.bodySmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        text = "Tipo: ${accesorio.tipo}",
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }
@@ -130,16 +109,16 @@ fun RopaCard(
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, widthDp = 360)
 @Composable
-fun PreviewRopaCard() {
-    val sample = Ropa(
+fun PreviewAccesorioCard() {
+    val sample = Accesorio(
         id = 1,
-        nombre = "Body algodón manga larga - Rosa con ositos",
-        talla = "0-3 M",
-        precio = 199.00,
+        nombre = "Monitor de Bebé Inteligente",
+        tipo = "Electrónico",
+        precio = 2999.00,
         imagenUrl = null
     )
 
     AppVentaProductosTheme {
-        RopaCard(ropa = sample, onClick = { })
+        AccesorioCard(accesorio = sample, onClick = { })
     }
 }

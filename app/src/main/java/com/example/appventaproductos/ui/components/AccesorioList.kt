@@ -9,23 +9,23 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.appventaproductos.data.model.Ropa
+import com.example.appventaproductos.data.model.Accesorio
 import com.example.appventaproductos.ui.theme.AppVentaProductosTheme
 
 @Composable
-fun RopaList(
-    lista: List<Ropa>,
-    onClick: (Ropa) -> Unit
+fun AccesorioList(
+    lista: List<Accesorio>,
+    onClick: (Accesorio) -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 16.dp),
+        columns = GridCells.Adaptive(minSize = 220.dp),
         contentPadding = PaddingValues(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(items = lista, key = { it.id ?: 0 }) { ropa ->
-            RopaCard(
-                ropa = ropa,
+        items(items = lista, key = { it.id ?: 0 }) { accesorio ->
+            AccesorioCard(
+                accesorio = accesorio,
                 onClick = onClick
             )
         }
@@ -34,41 +34,27 @@ fun RopaList(
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, widthDp = 360)
 @Composable
-fun PreviewRopaList() {
+fun PreviewAccesorioList() {
     val lista = listOf(
-        Ropa(
+        Accesorio(
             id = 1,
-            nombre = "Body algodón manga larga - Rosa con ositos",
-            talla = "0-3 M",
-            precio = 199.00,
+            nombre = "Monitor de Bebé Inteligente",
+            tipo = "Electrónico",
+            precio = 2999.00,
             imagenUrl = null
         ),
-        Ropa(
+        Accesorio(
             id = 2,
-            nombre = "Set pijama 2 piezas - Estrellas",
-            talla = "3-6 M",
-            precio = 349.00,
-            imagenUrl = null
-        ),
-        Ropa(
-            id = 3,
-            nombre = "Enterizo sin mangas unisex - Beige",
-            talla = "6-9 M",
-            precio = 259.00,
-            imagenUrl = null
-        ),
-        Ropa(
-            id = 4,
-            nombre = "Sudadera con capucha 'Osito' - Gris",
-            talla = "9-12 M",
-            precio = 429.00,
+            nombre = "Extractor de Leche Eléctrico",
+            tipo = "Lactancia",
+            precio = 1850.00,
             imagenUrl = null
         )
     )
 
     AppVentaProductosTheme {
         Surface {
-            RopaList(lista = lista, onClick = { })
+            AccesorioList(lista = lista, onClick = { })
         }
     }
 }

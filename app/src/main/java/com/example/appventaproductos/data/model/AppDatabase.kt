@@ -1,4 +1,4 @@
-package com.example.appventaproductos.data.local
+/*package com.example.appventaproductos.data.local
 
 
 import android.content.Context
@@ -42,4 +42,4 @@ abstract class AppDatabase : RoomDatabase() {
         }
     }
 }
-
+*/

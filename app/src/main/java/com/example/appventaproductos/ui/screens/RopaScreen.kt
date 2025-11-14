@@ -1,64 +1,47 @@
 package com.example.appventaproductos.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.appventaproductos.ui.components.RopaList
+import com.example.appventaproductos.ui.components.RopaCard
 import com.example.appventaproductos.viewmodel.RopaViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RopaScreen(
-    viewModel: RopaViewModel,
     navController: NavHostController
 ) {
-    val lista by viewModel.ropa.collectAsState(initial = emptyList())
+    val viewModel: RopaViewModel = viewModel(factory = RopaViewModel.Factory)
+    val ropaList by viewModel.ropaList.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("Ropa de bebé") }
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("product/add/ropa") }) {
-                Icon(Icons.Filled.Add, contentDescription = "Añadir ropa")
-            }
-        },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-    ) { inner ->
-        if (lista.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .padding(inner)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Sin productos")
-            }
-        } else {
-            Column(Modifier.padding(inner)) {
-                RopaList(lista) { item ->
-
-                    navController.navigate("ropa/${item.id}")
-                }
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    "Fin de la lista",
-                    style = MaterialTheme.typography.labelMedium,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
+    if (isLoading) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(ropaList) { ropa ->
+                RopaCard(
+                    ropa = ropa,
+                    onClick = {
+                        navController.navigate("ropa/${ropa.id}")
+                    }
                 )
             }
         }

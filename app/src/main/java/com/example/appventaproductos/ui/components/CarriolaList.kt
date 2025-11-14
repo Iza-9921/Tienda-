@@ -9,7 +9,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.appventaproductos.R
 import com.example.appventaproductos.data.model.Carriola
 import com.example.appventaproductos.ui.theme.AppVentaProductosTheme
 
@@ -19,15 +18,14 @@ fun CarriolaList(
     onClick: (Carriola) -> Unit
 ) {
     LazyVerticalGrid(
-        // Ajusta este valor: 220.dp hace cada tarjeta más ancha; usa Fixed(1) para 1 columna
         columns = GridCells.Adaptive(minSize = 220.dp),
         contentPadding = PaddingValues(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(items = lista, key = { it.id }) { carriola ->
+        items(items = lista, key = { it.id ?: 0 }) { carriola ->
             CarriolaCard(
-                Car = carriola,
+                carriola = carriola,
                 onClick = onClick
             )
         }
@@ -40,43 +38,29 @@ fun PreviewCarriolaList() {
     val lista = listOf(
         Carriola(
             id = 1,
-            imagen = R.drawable.carriola1,
-            TítuloProducto = "Carriola Modular Premium 3-en-1 (Moises, Asiento Reversible y Autoasiento)",
-            Precio = "MXN 8,999.00",
-            Condición = "Nueva (Certificada y Sellada)",
-            Características = "- Ruedas de goma todo terreno con suspensión en las 4 ruedas.\n" +
-                    " - Amplia canasta de almacenamiento inferior.\n" +
-                    " - Incluye: Portavasos y cubrepiés.",
-            Peso = "11.5 kg (Carriola con asiento)",
-            Materiales = "Chasis de aluminio ligero de alta resistencia y textiles hipoalergénicos",
-            Rangoedad = "0 meses en adelante",
-            metodoEnvio = "Envío terrestre gratuito a todo el país (3-5 días hábiles)"
+            marca = "Carriola Modular Premium",
+            modelo = "3-en-1 (Moises, Asiento Reversible)",
+            precio = 8999.00,
+            imagenUrl = null
         ),
         Carriola(
             id = 2,
-            imagen = R.drawable.carreolazul,
-            TítuloProducto = "Carriola Ultra Ligera de Viaje",
-            Precio = "MXN 3,450.00",
-            Condición = "Nueva (Certificada por fabricante)",
-            Características = "- Diseño ultra compacto, apto para cabina de avión.\n- Peso pluma, fácil de transportar.",
-            Peso = "2.6 kg",
-            Materiales = "Marco de acero reforzado",
-            Rangoedad = "A partir de los 6 meses",
-            metodoEnvio = "Envío Express (24-48 horas)"
+            marca = "Carriola Ultra Ligera",
+            modelo = "De Viaje Compacta",
+            precio = 3450.00,
+            imagenUrl = null
         ),
-                Carriola(
-                id = 3,
-        imagen = R.drawable.carrioladoble,
-        TítuloProducto = "Carriola Ultra Ligera de Viaje",
-        Precio = "MXN 6,990.00",
-        Condición = "Nueva (Ideal para padres activos)",
-        Características = "- Diseño aerodinámico de 3 ruedas grandes de aire para una estabilidad superior al correr.\n" +
-                "    - Freno de mano de tambor para desaceleración y frenado de emergencia.",
-        Peso = "13.8 kg",
-        Materiales = "Estructura de aluminio aeronáutico y neumáticos de caucho",
-        Rangoedad = "A partir de los 6 meses",
-        metodoEnvio = "Recolección local gratuita en Ciudad de México o envío nacional con tarifa plana de MXN 200.00"
+        Carriola(
+            id = 3,
+            marca = "Carriola Deportiva",
+            modelo = "3 Ruedas Todo Terreno",
+            precio = 6990.00,
+            imagenUrl = null
+        )
     )
-    )
-    AppVentaProductosTheme { Surface { CarriolaList(lista = lista, onClick = { }) } }
+    AppVentaProductosTheme {
+        Surface {
+            CarriolaList(lista = lista, onClick = { })
+        }
+    }
 }

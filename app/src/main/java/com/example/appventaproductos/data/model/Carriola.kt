@@ -1,13 +1,16 @@
 package com.example.appventaproductos.data.model
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+
+@Entity(tableName = "carriola")
 data class Carriola(
-    val id: Int = 0,
-    val imagen: Int = 0,
-    val TítuloProducto: String = "",
-    val Precio: String = "",
-    val Condición: String = "",
-    val Características: String = "",
-    val Peso: String = "",
-    val Materiales: String = "",
-    val Rangoedad: String = "",
-    val metodoEnvio: String = ""
+    @PrimaryKey
+    val id: Int? = null,
+    val marca: String,
+    val modelo: String,
+    val precio: Double,
+    @SerializedName("imagen_url")
+    val imagenUrl: String?
 )

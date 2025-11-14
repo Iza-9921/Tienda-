@@ -1,67 +1,73 @@
 package com.example.appventaproductos.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.appventaproductos.data.local.AppDatabase
 import com.example.appventaproductos.data.model.Ropa
-import com.example.appventaproductos.data.repository.ProductRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
+import com.example.appventaproductos.repository.ProductRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 
-class RopaViewModel(private val repository: ProductRepository) : ViewModel() {
+class RopaViewModel(private val repository: ProductRepository = ProductRepository()) : ViewModel() {
 
-    val ropa: StateFlow<List<Ropa>> = repository
-        .getRopa()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    private val _ropaList = MutableStateFlow<List<Ropa>>(emptyList())
+    val ropaList: StateFlow<List<Ropa>> = _ropaList.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
     init {
+        loadRopa()
+    }
+
+    fun loadRopa() {
         viewModelScope.launch {
-            repository.seedRopaIfNeeded()
+            _isLoading.value = true
+            _errorMessage.value = null
+            try {
+                _ropaList.value = repository.getRopa()
+            } catch (e: Exception) {
+                _errorMessage.value = "Error al cargar ropa: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
-    fun getById(id: Int): Flow<Ropa?> = repository.getRopaById(id)
-
-    fun addRopa(item: Ropa) {
+    fun createRopa(nombre: String, talla: String, precio: Double, imagenFile: File?) {
         viewModelScope.launch {
-            repository.insertRopa(item)
+            _isLoading.value = true
+            _errorMessage.value = null
+            try {
+                val nuevaRopa = repository.createRopa(nombre, talla, precio, imagenFile)
+                if (nuevaRopa != null) {
+                    loadRopa()
+                } else {
+                    _errorMessage.value = "Error al crear ropa"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Error al crear ropa: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
-    fun updateRopa(item: Ropa) {
-        viewModelScope.launch {
-            repository.updateRopa(item)
-        }
-    }
-
-    fun removeById(id: Int) {
-        viewModelScope.launch {
-            repository.deleteRopa(id)
-        }
-    }
-
-    fun clickRopa(ropa: Ropa) {
-        println("Has hecho click en: ${ropa.TítuloProducto}")
+    fun clearError() {
+        _errorMessage.value = null
     }
 
     companion object {
         val Factory = viewModelFactory {
             initializer {
-                val application = (this[APPLICATION_KEY] as Application)
-                val database = AppDatabase.getInstance(application)
-                val repository = ProductRepository(
-                    database.ropaDao(),
-                    database.carriolaDao(),
-                    database.accesorioDao()
-                )
-                RopaViewModel(repository)
+                RopaViewModel()
             }
         }
     }

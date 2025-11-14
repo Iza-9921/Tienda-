@@ -12,32 +12,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.appventaproductos.ui.components.AccesoriosList
-import com.example.appventaproductos.viewmodel.AccesoriosViewModel
+import com.example.appventaproductos.ui.components.AccesorioList
+import com.example.appventaproductos.viewmodel.AccesorioViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccesoriosScreen(
-    viewModel: AccesoriosViewModel,
+fun AccesorioScreen(
+    viewModel: AccesorioViewModel,
     navController: NavHostController
 ) {
-    val lista by viewModel.accesorios.collectAsState(initial = emptyList())
+    val lista by viewModel.accesorioList.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Accesorios de bebé") }
+                title = { Text("Accesorio de bebé") }
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("product/add/accesorios") }) {
+            FloatingActionButton(onClick = {
+                navController.navigate("product/add/accesorio")
+            }) {
                 Icon(Icons.Filled.Add, contentDescription = "Añadir accesorio")
             }
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { inner ->
-        if (lista.isEmpty()) {
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .padding(inner)
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else if (lista.isEmpty()) {
             Box(
                 modifier = Modifier
                     .padding(inner)
@@ -48,9 +60,8 @@ fun AccesoriosScreen(
             }
         } else {
             Column(Modifier.padding(inner)) {
-                AccesoriosList(lista) { item ->
-
-                    navController.navigate("accesorios/${item.id}")
+                AccesorioList(lista) { item ->
+                    navController.navigate("accesorio/${item.id}")
                 }
                 Spacer(Modifier.height(8.dp))
                 Text(

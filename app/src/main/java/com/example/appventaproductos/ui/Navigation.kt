@@ -16,7 +16,6 @@ fun Navigation() {
 
     NavHost(navController = navController, startDestination = "login") {
 
-        // Autenticación y entrada
         composable("login") {
             val vm: LoginViewModel = viewModel()
             LoginScreen(viewModel = vm, navController = navController)
@@ -25,27 +24,22 @@ fun Navigation() {
         composable("register") { RegisterScreen(navController) }
         composable("home") { HomeScreen(navController) }
 
-        // Menú principal
         composable("menu") {
             val vm: MenuViewModel = viewModel()
             MenuScreen(viewModel = vm, navController = navController)
         }
 
-        // Listas por categoría
         composable("carriola") {
-            val vm: CarriolaViewModel = viewModel(factory = CarriolaViewModel.Factory)
-            CarriolaScreen(viewModel = vm, navController = navController)
+            CarriolaScreen(navController = navController)
         }
         composable("ropa") {
-            val vm: RopaViewModel = viewModel(factory = RopaViewModel.Factory)
-            RopaScreen(viewModel = vm, navController = navController)
+            RopaScreen(navController = navController)
         }
-        composable("accesorios") {
-            val vm: AccesoriosViewModel = viewModel(factory = AccesoriosViewModel.Factory)
-            AccesoriosScreen(viewModel = vm, navController = navController)
+        composable("accesorio") {
+            val vm: AccesorioViewModel = viewModel(factory = AccesorioViewModel.Factory)
+            AccesorioScreen(viewModel = vm, navController = navController)
         }
 
-        // Navegaciones dinámicas usadas por tus listas: "{categoria}/{id}"
         composable(
             route = "ropa/{id}",
             arguments = listOf(navArgument("id") { type = NavType.IntType })
@@ -61,14 +55,13 @@ fun Navigation() {
             EditProductScreen(navController = navController, category = "carriola", id = id)
         }
         composable(
-            route = "accesorios/{id}",
+            route = "accesorio/{id}",
             arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) { backStack ->
             val id = backStack.arguments?.getInt("id") ?: -1
-            EditProductScreen(navController = navController, category = "accesorios", id = id)
+            EditProductScreen(navController = navController, category = "accesorio", id = id)
         }
 
-        // Agregar producto (abre formulario con categoría inicial)
         composable(
             route = "product/add/{category}",
             arguments = listOf(navArgument("category") { type = NavType.StringType })
@@ -77,7 +70,6 @@ fun Navigation() {
             AddProductScreen(navController = navController, initialCategory = category)
         }
 
-        // Editar producto genérico con categoría e id
         composable(
             route = "product/edit/{category}/{id}",
             arguments = listOf(

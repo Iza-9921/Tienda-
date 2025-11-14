@@ -1,6 +1,5 @@
 package com.example.appventaproductos.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,34 +22,32 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.Hyphens
-import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.appventaproductos.R
+import coil.compose.AsyncImage
 import com.example.appventaproductos.data.model.Carriola
 import com.example.appventaproductos.ui.theme.AppVentaProductosTheme
+import com.example.appventaproductos.R
 
 @Composable
 fun CarriolaCard(
-    Car: Carriola,
+    carriola: Carriola,
     onClick: (Carriola) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
     ElevatedCard(
-        onClick = { onClick(Car) },
+        onClick = { onClick(carriola) },
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(3f / 4f)
     ) {
         Column(Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(id = Car.imagen),
-                contentDescription = Car.TítuloProducto,
+            AsyncImage(
+                model = carriola.imagenUrl ?: R.drawable.carriola,
+                contentDescription = "${carriola.marca} ${carriola.modelo}",
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
@@ -63,12 +60,9 @@ fun CarriolaCard(
                     .padding(12.dp)
             ) {
                 Text(
-                    text = Car.TítuloProducto,
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        lineBreak = LineBreak.Paragraph,
-                        hyphens = Hyphens.Auto
-                    ),
-                    maxLines = if (expanded) Int.MAX_VALUE else 3,
+                    text = "${carriola.marca} ${carriola.modelo}",
+                    style = MaterialTheme.typography.titleSmall,
+                    maxLines = if (expanded) Int.MAX_VALUE else 2,
                     overflow = TextOverflow.Ellipsis
                 )
 
@@ -80,7 +74,7 @@ fun CarriolaCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = Car.Precio,
+                        text = "$${carriola.precio}",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -88,24 +82,11 @@ fun CarriolaCard(
                         onClick = { /* informativo */ },
                         label = {
                             Text(
-                                Car.Condición,
+                                "Nuevo",
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
                         }
-                    )
-                }
-
-                if (Car.Características.isNotBlank()) {
-                    Spacer(Modifier.height(6.dp))
-                    Text(
-                        text = Car.Características,
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            lineBreak = LineBreak.Paragraph,
-                            hyphens = Hyphens.Auto
-                        ),
-                        maxLines = if (expanded) Int.MAX_VALUE else 2,
-                        overflow = TextOverflow.Ellipsis
                     )
                 }
 
@@ -116,13 +97,7 @@ fun CarriolaCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = Car.Peso,
-                        style = MaterialTheme.typography.labelMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = Car.Rangoedad,
+                        text = carriola.modelo,
                         style = MaterialTheme.typography.labelMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -130,6 +105,23 @@ fun CarriolaCard(
                     TextButton(onClick = { expanded = !expanded }) {
                         Text(if (expanded) "Ver menos" else "Ver más")
                     }
+                }
+
+                if (expanded) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = "Marca: ${carriola.marca}",
+                        style = MaterialTheme.typography.bodySmall,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = "Modelo: ${carriola.modelo}",
+                        style = MaterialTheme.typography.bodySmall,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
         }
@@ -141,17 +133,12 @@ fun CarriolaCard(
 fun PreviewCarriolaCard() {
     val c = Carriola(
         id = 1,
-        imagen = R.drawable.carriola,
-        TítuloProducto = "Carriola Modular Premium 3-en-1 (Moises, Asiento Reversible y Autoasiento)",
-        Precio = "MXN 8,999.00",
-        Condición = "Nueva (Certificada y Sellada)",
-        Características = "- Ruedas de goma todo terreno con suspensión en las 4 ruedas.\n" +
-                " - Amplia canasta de almacenamiento inferior.\n" +
-                " - Incluye: Portavasos y cubrepiés.",
-        Peso = "11.5 kg",
-        Materiales = "Chasis de aluminio ligero y textiles hipoalergénicos",
-        Rangoedad = "0 meses en adelante",
-        metodoEnvio = "Envío terrestre gratuito (3-5 días hábiles)"
+        marca = "Carriola Modular Premium",
+        modelo = "3-en-1",
+        precio = 8999.00,
+        imagenUrl = null
     )
-    AppVentaProductosTheme { CarriolaCard(Car = c, onClick = { }) }
+    AppVentaProductosTheme {
+        CarriolaCard(carriola = c, onClick = { })
+    }
 }

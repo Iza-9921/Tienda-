@@ -37,10 +37,10 @@ fun MenuScreen(viewModel: MenuViewModel, navController: NavController) {
             )}
                 Row(modifier = Modifier.fillMaxWidth()){
                     InfoCard(
-                        "Accesorios",
-                        "Accesorios para bebes",
+                        "Accesorio",
+                        "Accesorio para bebes",
                         Modifier.weight(1f)
-                            .clickable{viewModel.goToAccesorios(navController)},
+                            .clickable{viewModel.goToAccesorio(navController)},
                         viewModel
                     )
 

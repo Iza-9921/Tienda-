@@ -10,7 +10,7 @@ class MenuViewModel : ViewModel() {
     fun goToRopa(navController: NavController) {
         navController.navigate("ropa")
     }
-    fun goToAccesorios(navController: NavController) {
-        navController.navigate("accesorios")
+    fun goToAccesorio(navController: NavController) {
+        navController.navigate("accesorio")
     }
 }

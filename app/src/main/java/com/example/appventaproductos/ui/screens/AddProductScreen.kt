@@ -38,28 +38,35 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.appventaproductos.R
-import com.example.appventaproductos.data.model.Accesorios
+import com.example.appventaproductos.data.model.Accesorio
 import com.example.appventaproductos.data.model.Carriola
 import com.example.appventaproductos.data.model.Ropa
-import com.example.appventaproductos.viewmodel.AccesoriosViewModel
+import com.example.appventaproductos.viewmodel.AccesorioViewModel
 import com.example.appventaproductos.viewmodel.CarriolaViewModel
 import com.example.appventaproductos.viewmodel.RopaViewModel
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductScreen(
     navController: NavHostController,
-    initialCategory: String // "ropa" | "carriola" | "accesorios"
+    initialCategory: String // "ropa" | "carriola" | "accesorio"
 ) {
     val ropaVM: RopaViewModel = viewModel(factory = RopaViewModel.Factory)
     val carriolaVM: CarriolaViewModel = viewModel(factory = CarriolaViewModel.Factory)
-    val accesoriosVM: AccesoriosViewModel = viewModel(factory = AccesoriosViewModel.Factory)
+    val accesorioVM: AccesorioViewModel = viewModel(factory = AccesorioViewModel.Factory)
 
     var nombre by rememberSaveable { mutableStateOf("") }
     var precio by rememberSaveable { mutableStateOf("") }
     var categoria by rememberSaveable { mutableStateOf(initialCategory) }
     var descripcion by rememberSaveable { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+    // Campos específicos por categoría
+    var talla by rememberSaveable { mutableStateOf("") } // Para ropa
+    var marca by rememberSaveable { mutableStateOf("") } // Para carriola
+    var modelo by rememberSaveable { mutableStateOf("") } // Para carriola
+    var tipo by rememberSaveable { mutableStateOf("") } // Para accesorio
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -68,12 +75,12 @@ fun AddProductScreen(
         }
     )
 
-    val defaultImage = R.drawable.unisex
-
     var showSavedDialog by remember { mutableStateOf(false) }
     var showNoChangeDialog by remember { mutableStateOf(false) }
+    var showErrorDialog by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
 
-    val categorias = listOf("ropa", "carriola", "accesorios")
+    val categorias = listOf("ropa", "carriola", "accesorio")
 
     Scaffold(
         topBar = {
@@ -94,49 +101,63 @@ fun AddProductScreen(
                     return@FloatingActionButton
                 }
 
-                when (categoria) {
-                    "ropa" -> ropaVM.addRopa(
-                        Ropa(
-                            id = 0,
-                            imagen = defaultImage, // TODO: save image URI
-                            TítuloProducto = nombre,
-                            Precio = precio,
-                            Condición = "Nuevo",
-                            Características = descripcion,
-                            Talla = "Única",
-                            Materiales = "N/A",
-                            Rangoedad = "N/A",
-                            metodoEnvio = "Envío estándar"
-                        )
-                    )
-                    "carriola" -> carriolaVM.addCarriola(
-                        Carriola(
-                            id = 0,
-                            imagen = defaultImage, // TODO: save image URI
-                            TítuloProducto = nombre,
-                            Precio = precio,
-                            Condición = "Nuevo",
-                            Características = descripcion,
-                            Peso = "N/A",
-                            Materiales = "N/A",
-                            Rangoedad = "N/A",
-                            metodoEnvio = "Envío estándar"
-                        )
-                    )
-                    "accesorios" -> accesoriosVM.addAccesorios(
-                        Accesorios(
-                            id = 0,
-                            imagen = defaultImage, // TODO: save image URI
-                            TítuloProducto = nombre,
-                            Precio = precio,
-                            Características = descripcion,
-                            Materiales = "N/A",
-                            Rangoedad = "N/A",
-                            metodoEnvio = "Envío estándar"
-                        )
-                    )
+                val precioNumero = precio.toDoubleOrNull()
+                if (precioNumero == null) {
+                    errorMessage = "El precio debe ser un número válido"
+                    showErrorDialog = true
+                    return@FloatingActionButton
                 }
-                showSavedDialog = true
+
+                try {
+                    when (categoria) {
+                        "ropa" -> {
+                            if (talla.isBlank()) {
+                                errorMessage = "La talla es obligatoria para ropa"
+                                showErrorDialog = true
+                                return@FloatingActionButton
+                            }
+                            // TODO: Implementar subida de imagen
+                            ropaVM.createRopa(
+                                nombre = nombre,
+                                talla = talla,
+                                precio = precioNumero,
+                                imagenFile = null // Por ahora sin imagen
+                            )
+                        }
+                        "carriola" -> {
+                            if (marca.isBlank() || modelo.isBlank()) {
+                                errorMessage = "Marca y modelo son obligatorios para carriolas"
+                                showErrorDialog = true
+                                return@FloatingActionButton
+                            }
+                            carriolaVM.createCarriola(
+                                marca = marca,
+                                modelo = modelo,
+                                precio = precioNumero,
+                                imagenFile = null // Por ahora sin imagen
+                            )
+                        }
+                        "accesorio" -> {
+                            if (tipo.isBlank()) {
+                                errorMessage = "El tipo es obligatorio para accesorios"
+                                showErrorDialog = true
+                                return@FloatingActionButton
+                            }
+                            val nuevoAccesorio = Accesorio(
+                                id = null,
+                                nombre = nombre,
+                                tipo = tipo,
+                                precio = precioNumero,
+                                imagenUrl = null // Por ahora sin imagen
+                            )
+                            accesorioVM.createAccesorio(nuevoAccesorio)
+                        }
+                    }
+                    showSavedDialog = true
+                } catch (e: Exception) {
+                    errorMessage = "Error al guardar: ${e.message}"
+                    showErrorDialog = true
+                }
             }) {
                 Icon(Icons.Filled.Check, contentDescription = "Guardar producto")
             }
@@ -149,12 +170,15 @@ fun AddProductScreen(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            // Campo común: Nombre
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre = it },
-                label = { Text("Nombre de producto") },
+                label = { Text("Nombre del producto") },
                 modifier = Modifier.fillMaxWidth()
             )
+
+            // Campo común: Precio
             OutlinedTextField(
                 value = precio,
                 onValueChange = { precio = it },
@@ -165,6 +189,7 @@ fun AddProductScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            // Selector de categoría
             var expanded by remember { mutableStateOf(false) }
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -185,13 +210,53 @@ fun AddProductScreen(
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     categorias.forEach { c ->
                         DropdownMenuItem(
-                            text = { Text(c) },
-                            onClick = { categoria = c; expanded = false }
+                            text = { Text(c.replaceFirstChar { it.uppercase() }) },
+                            onClick = {
+                                categoria = c
+                                expanded = false
+                            }
                         )
                     }
                 }
             }
 
+            // Campos específicos por categoría
+            when (categoria) {
+                "ropa" -> {
+                    OutlinedTextField(
+                        value = talla,
+                        onValueChange = { talla = it },
+                        label = { Text("Talla") },
+                        placeholder = { Text("Ej: 0-3M, 3-6M, etc.") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                "carriola" -> {
+                    OutlinedTextField(
+                        value = marca,
+                        onValueChange = { marca = it },
+                        label = { Text("Marca") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = modelo,
+                        onValueChange = { modelo = it },
+                        label = { Text("Modelo") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                "accesorio" -> {
+                    OutlinedTextField(
+                        value = tipo,
+                        onValueChange = { tipo = it },
+                        label = { Text("Tipo") },
+                        placeholder = { Text("Ej: Electrónico, Lactancia, etc.") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+
+            // Campo común: Descripción
             OutlinedTextField(
                 value = descripcion,
                 onValueChange = { descripcion = it },
@@ -203,6 +268,7 @@ fun AddProductScreen(
                 maxLines = 6
             )
 
+            // Sección de imagen
             Text(text = "Añadir foto del producto")
             Box(
                 modifier = Modifier
@@ -211,7 +277,12 @@ fun AddProductScreen(
                 contentAlignment = Alignment.Center
             ) {
                 AsyncImage(
-                    model = imageUri ?: defaultImage,
+                    model = imageUri ?: when (categoria) {
+                        "ropa" -> R.drawable.unisex
+                        "carriola" -> R.drawable.carriola
+                        "accesorio" -> R.drawable.monitor
+                        else -> R.drawable.unisex
+                    },
                     contentDescription = "Imagen de producto",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -220,10 +291,13 @@ fun AddProductScreen(
             Button(
                 onClick = { imagePicker.launch("image/*") },
                 modifier = Modifier.align(Alignment.End)
-            ) { Text("Añadir foto") }
+            ) {
+                Text("Añadir foto")
+            }
         }
     }
 
+    // Diálogos
     if (showSavedDialog) {
         AlertDialog(
             onDismissRequest = { showSavedDialog = false },
@@ -231,18 +305,38 @@ fun AddProductScreen(
                 TextButton(onClick = {
                     showSavedDialog = false
                     navController.popBackStack()
-                }) { Text("OK") }
+                }) {
+                    Text("OK")
+                }
             },
             title = { Text("Producto guardado correctamente") },
-            text = { Text("Tu producto se agregó a la categoría $categoria") }
+            text = { Text("Tu producto se agregó a la categoría ${categoria.replaceFirstChar { it.uppercase() }}") }
         )
     }
+
     if (showNoChangeDialog) {
         AlertDialog(
             onDismissRequest = { showNoChangeDialog = false },
-            confirmButton = { TextButton(onClick = { showNoChangeDialog = false }) { Text("OK") } },
+            confirmButton = {
+                TextButton(onClick = { showNoChangeDialog = false }) {
+                    Text("OK")
+                }
+            },
             title = { Text("No se han guardado cambios") },
             text = { Text("Completa al menos Nombre y Precio para guardar") }
+        )
+    }
+
+    if (showErrorDialog) {
+        AlertDialog(
+            onDismissRequest = { showErrorDialog = false },
+            confirmButton = {
+                TextButton(onClick = { showErrorDialog = false }) {
+                    Text("OK")
+                }
+            },
+            title = { Text("Error") },
+            text = { Text(errorMessage) }
         )
     }
 }
