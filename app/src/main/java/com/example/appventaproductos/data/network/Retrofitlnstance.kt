@@ -1,33 +1,22 @@
-package com.example.appventaproductos.network
+package mx.edu.utez.veterinaria.data.network
 
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import com.example.appventaproductos.network.ApiService   // <- importa la interfaz donde esté realmente
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
-    private const val BASE_URL = "http://192.168.110.145:5000/"
 
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
+    // IP del emulador o tu red local
+    private const val BASE_URL = "http://192.168.107.116:5000/"
 
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .build()
-
-    val retrofit: Retrofit by lazy {
+    private val retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    val apiService: ApiService by lazy {
+    val api: ApiService by lazy {
         retrofit.create(ApiService::class.java)
     }
 }

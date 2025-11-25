@@ -46,15 +46,18 @@ class CarriolaViewModel(private val repository: ProductRepository = ProductRepos
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                print("Lo que sea")
                 val nuevaCarriola = repository.createCarriola(marca, modelo, precio, imagenFile)
                 if (nuevaCarriola != null) {
                     loadCarriola()
                 } else {
                     _errorMessage.value = "Error al crear carriola"
+                    error("Error al crear carriola")
+                    println("Lo que sea")
+                    println("Lo que sea")
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Error al crear carriola: ${e.message}"
+                error("Error al crear carriola ${e.message}")
             } finally {
                 _isLoading.value = false
             }
