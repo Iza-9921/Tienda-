@@ -37,7 +37,8 @@ import com.example.appventaproductos.ui.theme.AppVentaProductosTheme
 @Composable
 fun CarriolaCard(
     Car: Carriola,
-    onClick: (Carriola) -> Unit
+    onClick: (Carriola) -> Unit,
+    on3dClick: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -110,23 +111,15 @@ fun CarriolaCard(
                 }
 
                 Spacer(Modifier.height(6.dp))
+                // Fila para los botones de acción
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = Car.Peso,
-                        style = MaterialTheme.typography.labelMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = Car.Rangoedad,
-                        style = MaterialTheme.typography.labelMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    TextButton(onClick = { on3dClick() }) {
+                        Text("Ver en 3D")
+                    }
                     TextButton(onClick = { expanded = !expanded }) {
                         Text(if (expanded) "Ver menos" else "Ver más")
                     }
@@ -141,7 +134,7 @@ fun CarriolaCard(
 fun PreviewCarriolaCard() {
     val c = Carriola(
         id = 1,
-        imagen = R.drawable.carriola,
+        imagen = R.drawable.carriola1,
         TítuloProducto = "Carriola Modular Premium 3-en-1 (Moises, Asiento Reversible y Autoasiento)",
         Precio = "MXN 8,999.00",
         Condición = "Nueva (Certificada y Sellada)",
@@ -153,5 +146,5 @@ fun PreviewCarriolaCard() {
         Rangoedad = "0 meses en adelante",
         metodoEnvio = "Envío terrestre gratuito (3-5 días hábiles)"
     )
-    AppVentaProductosTheme { CarriolaCard(Car = c, onClick = { }) }
+    AppVentaProductosTheme { CarriolaCard(Car = c, onClick = { }, on3dClick = {}) }
 }

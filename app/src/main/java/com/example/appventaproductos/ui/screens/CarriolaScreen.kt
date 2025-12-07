@@ -48,10 +48,17 @@ fun CarriolaScreen(
             }
         } else {
             Column(Modifier.padding(inner)) {
-                CarriolaList(lista) { item ->
-                    // Guarda selección si hace falta y navega al detalle
-                    navController.navigate("carriola/${item.id}")
-                }
+                CarriolaList(
+                    lista = lista,
+                    onClick = { item ->
+                        // Guarda selección si hace falta y navega al detalle
+                        navController.navigate("carriola/${item.id}")
+                    },
+                    on3dClick = {
+                        // ¡Aquí está la navegación al giroscopio!
+                        navController.navigate("gyroscope_carriola")
+                    }
+                )
                 Spacer(Modifier.height(8.dp))
                 Text(
                     "Fin de la lista",

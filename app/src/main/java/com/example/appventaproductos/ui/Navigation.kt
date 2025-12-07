@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.appventaproductos.features.gyroscope.GyroscopeScreen
 import com.example.appventaproductos.ui.screens.*
 import com.example.appventaproductos.viewmodel.*
 
@@ -29,6 +30,11 @@ fun Navigation() {
         composable("menu") {
             val vm: MenuViewModel = viewModel()
             MenuScreen(viewModel = vm, navController = navController)
+        }
+
+        // Pantalla del Giroscopio
+        composable("gyroscope_carriola") {
+            GyroscopeScreen()
         }
 
         // Listas por categoría

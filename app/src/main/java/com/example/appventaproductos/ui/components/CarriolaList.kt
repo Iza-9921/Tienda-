@@ -16,10 +16,10 @@ import com.example.appventaproductos.ui.theme.AppVentaProductosTheme
 @Composable
 fun CarriolaList(
     lista: List<Carriola>,
-    onClick: (Carriola) -> Unit
+    onClick: (Carriola) -> Unit,
+    on3dClick: (Carriola) -> Unit
 ) {
     LazyVerticalGrid(
-        // Ajusta este valor: 220.dp hace cada tarjeta más ancha; usa Fixed(1) para 1 columna
         columns = GridCells.Adaptive(minSize = 220.dp),
         contentPadding = PaddingValues(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -28,7 +28,8 @@ fun CarriolaList(
         items(items = lista, key = { it.id }) { carriola ->
             CarriolaCard(
                 Car = carriola,
-                onClick = onClick
+                onClick = onClick,
+                on3dClick = { on3dClick(carriola) }
             )
         }
     }
@@ -78,5 +79,5 @@ fun PreviewCarriolaList() {
         metodoEnvio = "Recolección local gratuita en Ciudad de México o envío nacional con tarifa plana de MXN 200.00"
     )
     )
-    AppVentaProductosTheme { Surface { CarriolaList(lista = lista, onClick = { }) } }
+    AppVentaProductosTheme { Surface { CarriolaList(lista = lista, onClick = { }, on3dClick = {}) } }
 }
