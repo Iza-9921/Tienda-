@@ -1,11 +1,11 @@
-package com.example.appventaproductos.data.local.dao
+package com.example.appventaproductos.data.model.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.appventaproductos.data.local.entity.RopaEntity
+import com.example.appventaproductos.data.entity.RopaEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

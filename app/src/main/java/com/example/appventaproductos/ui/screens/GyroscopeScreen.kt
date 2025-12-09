@@ -1,4 +1,4 @@
-package com.example.appventaproductos.features.gyroscope
+package com.example.appventaproductos.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appventaproductos.R
+import com.example.appventaproductos.viewmodel.GyroscopeViewModel
 
 @Composable
 fun GyroscopeScreen(

@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.appventaproductos.features.gyroscope.GyroscopeScreen
+import com.example.appventaproductos.ui.screens.GyroscopeScreen
 import com.example.appventaproductos.ui.screens.*
 import com.example.appventaproductos.viewmodel.*
 

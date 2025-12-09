@@ -1,12 +1,12 @@
 package com.example.appventaproductos.data.repository
 
 import com.example.appventaproductos.R
-import com.example.appventaproductos.data.local.dao.AccesorioDao
-import com.example.appventaproductos.data.local.dao.CarriolaDao
-import com.example.appventaproductos.data.local.dao.RopaDao
-import com.example.appventaproductos.data.local.entity.AccesorioEntity
-import com.example.appventaproductos.data.local.entity.CarriolaEntity
-import com.example.appventaproductos.data.local.entity.RopaEntity
+import com.example.appventaproductos.data.model.dao.AccesorioDao
+import com.example.appventaproductos.data.model.dao.CarriolaDao
+import com.example.appventaproductos.data.model.dao.RopaDao
+import com.example.appventaproductos.data.entity.AccesorioEntity
+import com.example.appventaproductos.data.entity.CarriolaEntity
+import com.example.appventaproductos.data.entity.RopaEntity
 import com.example.appventaproductos.data.model.Accesorios
 import com.example.appventaproductos.data.model.Carriola
 import com.example.appventaproductos.data.model.Ropa

@@ -1,5 +1,4 @@
-
-package com.example.appventaproductos.features.gyroscope
+package com.example.appventaproductos.viewmodel
 
 import android.app.Application
 import android.content.Context
@@ -12,7 +11,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlin.math.sqrt
 
 // Estado para la UI del giroscopio
 data class GyroscopeUiState(

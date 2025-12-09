@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.appventaproductos.data.local.AppDatabase
+import com.example.appventaproductos.data.network.AppDatabase
 import com.example.appventaproductos.data.model.Ropa
 import com.example.appventaproductos.data.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
