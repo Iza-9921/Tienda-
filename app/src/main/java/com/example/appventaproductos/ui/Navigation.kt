@@ -32,9 +32,13 @@ fun Navigation() {
             MenuScreen(viewModel = vm, navController = navController)
         }
 
-        // Pantalla del Giroscopio
-        composable("gyroscope_carriola") {
-            GyroscopeScreen()
+        // Pantalla del Giroscopio (Ver en 3D)
+        composable(
+            route = "view_3d/{imageResId}",
+            arguments = listOf(navArgument("imageResId") { type = NavType.IntType })
+        ) { backStack ->
+            val imageResId = backStack.arguments?.getInt("imageResId") ?: 0
+            GyroscopeScreen(imageResId = imageResId)
         }
 
         // Listas por categoría

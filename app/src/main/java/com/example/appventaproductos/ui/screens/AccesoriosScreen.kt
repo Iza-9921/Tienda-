@@ -48,10 +48,15 @@ fun AccesoriosScreen(
             }
         } else {
             Column(Modifier.padding(inner)) {
-                AccesoriosList(lista) { item ->
-
-                    navController.navigate("accesorios/${item.id}")
-                }
+                AccesoriosList(
+                    lista = lista,
+                    onClick = { item ->
+                        navController.navigate("accesorios/${item.id}")
+                    },
+                    on3dClick = { item ->
+                        navController.navigate("view_3d/${item.imagen}")
+                    }
+                )
                 Spacer(Modifier.height(8.dp))
                 Text(
                     "Fin de la lista",

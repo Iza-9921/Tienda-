@@ -48,10 +48,15 @@ fun RopaScreen(
             }
         } else {
             Column(Modifier.padding(inner)) {
-                RopaList(lista) { item ->
-
-                    navController.navigate("ropa/${item.id}")
-                }
+                RopaList(
+                    lista = lista,
+                    onClick = { item ->
+                        navController.navigate("ropa/${item.id}")
+                    },
+                    on3dClick = { item ->
+                        navController.navigate("view_3d/${item.imagen}")
+                    }
+                )
                 Spacer(Modifier.height(8.dp))
                 Text(
                     "Fin de la lista",

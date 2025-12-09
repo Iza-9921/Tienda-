@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,7 +40,10 @@ import com.example.appventaproductos.data.model.Accesorios
 @Composable
 fun AccesoriosCard(
     accesorios: Accesorios,
-    onClick: (Accesorios) -> Unit
+    onClick: (Accesorios) -> Unit,
+    on3dClick: () -> Unit,
+    rotationX: Float = 0f,
+    rotationY: Float = 0f
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -55,7 +59,11 @@ fun AccesoriosCard(
                 contentDescription = accesorios.TítuloProducto,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f),
+                    .weight(1f)
+                    .graphicsLayer {
+                        this.rotationX = rotationX
+                        this.rotationY = rotationY
+                    },
                 contentScale = ContentScale.Crop
             )
 
@@ -107,12 +115,9 @@ fun AccesoriosCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = accesorios.Rangoedad,
-                        style = MaterialTheme.typography.labelMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    TextButton(onClick = { on3dClick() }) {
+                        Text("Ver en 3D")
+                    }
                     TextButton(onClick = { expanded = !expanded }) {
                         Text(if (expanded) "Ver menos" else "Ver más")
                     }
@@ -130,6 +135,13 @@ fun AccesoriosCard(
                     Text(
                         text = "Envío: ${accesorios.metodoEnvio}",
                         style = MaterialTheme.typography.bodySmall,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = accesorios.Rangoedad,
+                        style = MaterialTheme.typography.labelMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -155,6 +167,6 @@ fun PreviewAccesoriosCard() {
     )
 
     AppVentaProductosTheme {
-        AccesoriosCard(accesorios = sample, onClick = { /* acción de preview */ })
+        AccesoriosCard(accesorios = sample, onClick = { /* acción de preview */ }, on3dClick = {})
     }
 }

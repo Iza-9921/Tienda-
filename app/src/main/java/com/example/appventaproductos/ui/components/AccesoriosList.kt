@@ -19,7 +19,10 @@ import com.example.appventaproductos.ui.theme.AppVentaProductosTheme
 @Composable
 fun AccesoriosList(
     lista: List<Accesorios>,
-    onClick: (Accesorios) -> Unit
+    onClick: (Accesorios) -> Unit,
+    on3dClick: (Accesorios) -> Unit = {},
+    rotationX: Float = 0f,
+    rotationY: Float = 0f
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 220.dp),
@@ -30,7 +33,10 @@ fun AccesoriosList(
         items(items = lista, key = { it.id }) { accesorios ->
             AccesoriosCard(
                 accesorios = accesorios,
-                onClick = onClick
+                onClick = onClick,
+                on3dClick = { on3dClick(accesorios) }
+                //rotationX = rotationX,
+                //rotationY = rotationY
             )
         }
     }

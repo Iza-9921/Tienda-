@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,7 +38,8 @@ import com.example.appventaproductos.R
 @Composable
 fun RopaCard(
     ropa: Ropa,
-    onClick: (Ropa) -> Unit
+    onClick: (Ropa) -> Unit,
+    on3dClick: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -115,18 +117,9 @@ fun RopaCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "Talla: ${ropa.Talla}",
-                        style = MaterialTheme.typography.labelMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = ropa.Rangoedad,
-                        style = MaterialTheme.typography.labelMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    TextButton(onClick = { on3dClick() }) {
+                        Text("Ver en 3D")
+                    }
                     TextButton(onClick = { expanded = !expanded }) {
                         Text(if (expanded) "Ver menos" else "Ver más")
                     }
@@ -144,6 +137,19 @@ fun RopaCard(
                     Text(
                         text = "Envío: ${ropa.metodoEnvio}",
                         style = MaterialTheme.typography.bodySmall,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = "Talla: ${ropa.Talla}",
+                        style = MaterialTheme.typography.labelMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = ropa.Rangoedad,
+                        style = MaterialTheme.typography.labelMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -170,6 +176,6 @@ fun PreviewRopaCard() {
     )
 
     AppVentaProductosTheme {
-        RopaCard(ropa = sample, onClick = { /* acción de preview */ })
+        RopaCard(ropa = sample, onClick = { /* acción de preview */ }, on3dClick = {})
     }
 }

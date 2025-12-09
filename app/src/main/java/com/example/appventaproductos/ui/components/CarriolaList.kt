@@ -17,7 +17,9 @@ import com.example.appventaproductos.ui.theme.AppVentaProductosTheme
 fun CarriolaList(
     lista: List<Carriola>,
     onClick: (Carriola) -> Unit,
-    on3dClick: (Carriola) -> Unit
+    on3dClick: (Carriola) -> Unit,
+    rotationX: Float = 0f,
+    rotationY: Float = 0f
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 220.dp),
@@ -29,7 +31,9 @@ fun CarriolaList(
             CarriolaCard(
                 Car = carriola,
                 onClick = onClick,
-                on3dClick = { on3dClick(carriola) }
+                on3dClick = { on3dClick(carriola) },
+                //rotationX = rotationX,
+                //rotationY = rotationY
             )
         }
     }

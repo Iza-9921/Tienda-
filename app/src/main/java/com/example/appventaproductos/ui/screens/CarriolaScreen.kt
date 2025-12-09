@@ -51,12 +51,10 @@ fun CarriolaScreen(
                 CarriolaList(
                     lista = lista,
                     onClick = { item ->
-                        // Guarda selección si hace falta y navega al detalle
                         navController.navigate("carriola/${item.id}")
                     },
-                    on3dClick = {
-                        // ¡Aquí está la navegación al giroscopio!
-                        navController.navigate("gyroscope_carriola")
+                    on3dClick = { item ->
+                        navController.navigate("view_3d/${item.imagen}")
                     }
                 )
                 Spacer(Modifier.height(8.dp))

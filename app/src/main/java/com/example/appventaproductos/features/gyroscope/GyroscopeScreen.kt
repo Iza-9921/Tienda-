@@ -1,4 +1,3 @@
-
 package com.example.appventaproductos.features.gyroscope
 
 import androidx.compose.foundation.Image
@@ -21,7 +20,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appventaproductos.R
 
 @Composable
-fun GyroscopeScreen(gyroscopeViewModel: GyroscopeViewModel = viewModel()) {
+fun GyroscopeScreen(
+    imageResId: Int,
+    gyroscopeViewModel: GyroscopeViewModel = viewModel()
+) {
     val uiState by gyroscopeViewModel.uiState.collectAsState()
 
     Column(
@@ -29,11 +31,11 @@ fun GyroscopeScreen(gyroscopeViewModel: GyroscopeViewModel = viewModel()) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Mueve tu dispositivo para rotar la carriola", fontSize = 20.sp, modifier = Modifier.padding(bottom = 48.dp))
+        Text("Mueve tu dispositivo para rotar el producto", fontSize = 20.sp, modifier = Modifier.padding(bottom = 48.dp))
 
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = "Carriola 3D",
+            painter = painterResource(id = if (imageResId != 0) imageResId else R.drawable.ic_launcher_foreground),
+            contentDescription = "Producto 3D",
             modifier = Modifier
                 .size(250.dp)
                 .graphicsLayer {
