@@ -41,6 +41,12 @@ android {
     buildFeatures {
         compose = true
     }
+    
+    aaptOptions {
+        noCompress.add("filamat")
+        noCompress.add("gltf")
+        noCompress.add("glb")
+    }
 }
 
 dependencies {
@@ -61,6 +67,11 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation("io.coil-kt:coil-compose:2.7.0")
+
+    // 3D Model Viewer
+    implementation("io.github.sceneview:sceneview:2.1.0")
+    implementation("com.google.android.filament:filament-android:1.49.2")
+    implementation("com.google.android.filament:gltfio-android:1.49.2")
 
     // Room
     implementation(libs.androidx.room.runtime)

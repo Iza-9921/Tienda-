@@ -14,7 +14,7 @@ import com.example.appventaproductos.data.entity.RopaEntity
 
 @Database(
     entities = [RopaEntity::class, CarriolaEntity::class, AccesorioEntity::class],
-    version = 1,
+    version = 2, // <-- El cambio clave está aquí
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -38,7 +38,7 @@ abstract class AppDatabase : RoomDatabase() {
                 context,
                 AppDatabase::class.java,
                 "tienda_bebes.db"
-            ).build()
+            ).fallbackToDestructiveMigration().build()
         }
     }
 }

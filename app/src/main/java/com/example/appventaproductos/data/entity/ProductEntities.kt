@@ -21,6 +21,7 @@ data class RopaEntity(
 data class CarriolaEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val imagen: Int,
+    val modelo3d: String,
     val titulo: String,
     val precio: String,
     val condicion: String,

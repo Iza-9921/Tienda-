@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.appventaproductos.ui.components.CarriolaList
 import com.example.appventaproductos.viewmodel.CarriolaViewModel
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +56,8 @@ fun CarriolaScreen(
                         navController.navigate("carriola/${item.id}")
                     },
                     on3dClick = { item ->
-                        navController.navigate("view_3d/${item.imagen}")
+                        val encodedUrl = URLEncoder.encode(item.modelo3d, StandardCharsets.UTF_8.toString())
+                        navController.navigate("view_3d/$encodedUrl")
                     }
                 )
                 Spacer(Modifier.height(8.dp))

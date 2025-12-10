@@ -152,6 +152,7 @@ class ProductRepository(
         CarriolaEntity(
             id = 1,
             imagen = R.drawable.carriola,
+            modelo3d = "models/base.glb",
             titulo = "Carriola Modular Premium 3-en-1 (Moises, Asiento Reversible y Autoasiento)",
             precio = "MXN 8,999.00",
             condicion = "Nueva (Certificada y Sellada)",
@@ -164,6 +165,7 @@ class ProductRepository(
         CarriolaEntity(
             id = 2,
             imagen = R.drawable.carriola1,
+            modelo3d = "models/base.glb",
             titulo = "Carriola Ultra Ligera de Viaje",
             precio = "MXN 3,450.00",
             condicion = "Nueva (Certificada por fabricante)",
@@ -248,6 +250,7 @@ private fun Ropa.toEntity() = RopaEntity(
 private fun CarriolaEntity.toDomain() = Carriola(
     id = id,
     imagen = imagen,
+    modelo3d = modelo3d,
     TítuloProducto = titulo,
     Precio = precio,
     Condición = condicion,
@@ -261,6 +264,7 @@ private fun CarriolaEntity.toDomain() = Carriola(
 private fun Carriola.toEntity() = CarriolaEntity(
     id = if (id == 0) 0 else id,
     imagen = imagen,
+    modelo3d = modelo3d,
     titulo = TítuloProducto,
     precio = Precio,
     condicion = Condición,

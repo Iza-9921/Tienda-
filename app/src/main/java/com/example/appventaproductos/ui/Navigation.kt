@@ -10,6 +10,8 @@ import androidx.navigation.navArgument
 import com.example.appventaproductos.ui.screens.GyroscopeScreen
 import com.example.appventaproductos.ui.screens.*
 import com.example.appventaproductos.viewmodel.*
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun Navigation() {
@@ -34,11 +36,12 @@ fun Navigation() {
 
         // Pantalla del Giroscopio (Ver en 3D)
         composable(
-            route = "view_3d/{imageResId}",
-            arguments = listOf(navArgument("imageResId") { type = NavType.IntType })
+            route = "view_3d/{modelPath}",
+            arguments = listOf(navArgument("modelPath") { type = NavType.StringType })
         ) { backStack ->
-            val imageResId = backStack.arguments?.getInt("imageResId") ?: 0
-            GyroscopeScreen(imageResId = imageResId)
+            val encodedModelPath = backStack.arguments?.getString("modelPath") ?: ""
+            val modelPath = URLDecoder.decode(encodedModelPath, StandardCharsets.UTF_8.toString())
+            Model3DViewScreen(modelPath = modelPath)
         }
 
         // Listas por categoría

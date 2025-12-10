@@ -30,10 +30,8 @@ fun CarriolaList(
         items(items = lista, key = { it.id }) { carriola ->
             CarriolaCard(
                 Car = carriola,
-                onClick = onClick,
-                on3dClick = { on3dClick(carriola) },
-                //rotationX = rotationX,
-                //rotationY = rotationY
+                onClick = { onClick(carriola) },
+                on3dClick = { on3dClick(carriola) }
             )
         }
     }
@@ -83,5 +81,5 @@ fun PreviewCarriolaList() {
         metodoEnvio = "Recolección local gratuita en Ciudad de México o envío nacional con tarifa plana de MXN 200.00"
     )
     )
-    AppVentaProductosTheme { Surface { CarriolaList(lista = lista, onClick = { }, on3dClick = {}) } }
+    AppVentaProductosTheme { Surface { CarriolaList(lista = lista, onClick = { }, on3dClick = { }) } }
 }
